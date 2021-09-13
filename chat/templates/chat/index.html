@@ -1,0 +1,30 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid text-center mx-auto form-group p-3">
+    <h4>What chat room would you like to enter?</h4>
+    <input class="form-control" id="room-name-input" type="text" size="100" placeholder="Enter a ChatRoom name"><br>
+    <button class=" btn-dark btn-lg btn-block" id="room-name-submit" type="button">Enter</button>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        {% for room in chats %}
+        <div class="col-lg-4" style="background-image: ">
+            <a href="{% url 'room' room.name %}">
+                <div class="card bg-dark">
+                    <img src="{% static 'steven_bg08.gif'%}" class="card-img embed-responsive" alt="..." style="height:20vh;object-fit:cover">
+                    <div class="card-img-overlay" style="justify-content: center;align-items: center;display: flex">
+                        <h3 class="card-text text-uppercase text-body">{{ room.name }}</h3>
+                    </div>
+                    <p class="text-center text-white">{{room.users.all.count}} Pessoas no chat</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="{% static 'index.js' %}"></script>
+{% endblock content %}

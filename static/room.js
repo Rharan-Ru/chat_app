@@ -9,7 +9,7 @@ const chatSocket = new WebSocket(
     + roomName
     + '/'
 );
-
+console.log(window.location.host)
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const user_Id = data.user_id

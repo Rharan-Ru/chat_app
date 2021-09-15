@@ -2,13 +2,9 @@ const roomName = JSON.parse(document.getElementById('room-name').textContent);
 var scroll = document.getElementById('position')
 scroll.scrollTop = scroll.scrollHeight;
 
-const chatSocket = new WebSocket(
-    'wss://'
-    + window.location.host
-    + '/ws/chat/'
-    + roomName
-    + '/'
-);
+var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+var chat_socket = new WebSocket(ws_scheme + '://' + window.location.host + "/ws/chat/" + roomName + '/');
+
 console.log(window.location.host)
 console.log(WebSocket)
 

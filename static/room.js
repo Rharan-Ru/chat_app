@@ -3,7 +3,7 @@ var scroll = document.getElementById('position')
 scroll.scrollTop = scroll.scrollHeight;
 
 var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-var chat_socket = new WebSocket(ws_scheme + '://' + window.location.host + "/ws/chat/" + roomName + '/');
+var chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + "/ws/chat/" + roomName + '/');
 
 console.log(window.location.host)
 console.log(WebSocket)

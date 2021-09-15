@@ -10,6 +10,8 @@ const chatSocket = new WebSocket(
     + '/'
 );
 console.log(window.location.host)
+console.log(WebSocket)
+
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const user_Id = data.user_id

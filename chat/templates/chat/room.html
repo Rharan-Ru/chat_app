@@ -2,32 +2,33 @@
 {% load static %}
 
 {% block content %}
-<p class="text-center p-2 "><strong id="num_users">{{room.name}} - {{room.users.all.count}} members</strong></p>
+<p class="text-center p-2 text-uppercase"><strong id="num_users">{{room.name}} - {{room.users.all.count}} members</strong></p>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<div class="p-0 m-0 mt-2 card bg-dark text-white" id="position" style="height:70vh; overflow-y: auto;background-image: url({% static 'steven_bg08.gif' %});background-size:cover;background-position:center">
+
+<div class="p-0 m-0 card bg-dark text-white" id="position" style="height:70vh; overflow-y: auto;background-image: url({% static 'steven_bg08.gif' %});background-size:cover;background-position:center;scroll-behavior: smooth">
     <div class="card-img-overlay p-1" id="chat-log">
         {% for chat in chats %}
         {% if request.user == chat.user %}
-        <div class='text-white m-0 mt-1 p-4' style='background: rgba(0, 0, 0, 0.9);'>
-            <div class="row">
-                <div class="col-1 p-0 m-0 row perfil1">
-                    <img src="{{chat.user.profile.image.url}}" class="img-fluid rounded-circle ml-1 mr-1 " style="width:30px;height:30px;background: rgba(0, 0, 0, 0.9)">
-                    <p class='text-left m-0 ' style='opacity:none;'><strong>{{ chat.user }}</strong></p>
+        <div class='m-0 mt-1 p-0'>
+            <div class="row m-0 p-0">
+                <div class="col-12 m-0 p-0">
+                    <img class="float-left rounded-circle" src="{{ chat.user.profile.image.url }}" style="width:30px;height:30px" alt="">
+                    <p class="float-left ml-2"><strong>{{ chat.user }}</strong></p>
                 </div>
-                <div class="col-11 m-0 p-0 mensagem1">
-                    <p class='text-left p-0 m-0 pl-2 ml-2'> {{ chat.content }} </p>
+                <div class="container rounded ml-0 pl-0 perfil1" style="width:55%">
+                    <p class="bg-dark float-left rounded text-card p-2" style="max-width:100%; min-width:15%">{{ chat.content }}</p>
                 </div>
             </div>
         </div>
         {% else %}
-        <div class='text-white m-0 mt-1 p-4' style='background: rgba(255, 255, 255, 0.9);'>
-            <div class="row">
-                <div class="col-11 m-0 p-0 mensagem1">
-                    <p class='text-right text-body p-0 m-0 pr-2 mr-2'> {{ chat.content }} </p>
+        <div class='text-body m-0 mt-1 p-0'>
+            <div class="row m-0 p-0">
+                <div class="col-12 m-0 p-0">
+                    <img class="float-right rounded-circle" src="{{ chat.user.profile.image.url }}" style="width:30px;height:30px" alt="">
+                    <p class="float-right mr-2"><strong>{{ chat.user }}</strong></p>
                 </div>
-                <div class="col-1 p-0 m-0 row perfil1">
-                    <img src="{{chat.user.profile.image.url}}" class="img-fluid rounded-circle ml-1 mr-1 " style="width:30px;height:30px;background: rgba(0, 0, 0, 0.9)">
-                    <p class='text-right text-body m-0 ' style='opacity:none;'><strong>{{ chat.user }}</strong></p>
+                <div class="container rounded mr-0 pr-0 perfil1" style="width:55%">
+                    <p class="bg-primary float-right rounded text-card p-2" style="max-width:100%;min-width:15%;">{{ chat.content }}</p>
                 </div>
             </div>
         </div>
@@ -35,10 +36,11 @@
         {% endfor %}
     </div>
 </div>
-
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="row p-0 m-0">
-    <input type="text" class="col-10 form-control mb-3 required-field" id="chat-message-input" maxlength="5000" placeholder="..." required>
-    <button class="col-2 btn btn-success msg" style="height:10%" id="chat-message-submit" type="submit" value="Send">Send</button>
+    <input type="text" class="form-control mb-3 required-field" style="width:92%" id="chat-message-input" maxlength="5000" placeholder="..." required>
+    <button class="text-center btn btn-success msg rounded-circle" style="height:10%;width:50px" id="chat-message-submit" type="submit" value="Send"><span class="material-icons">sender</span></button>
+
 </div>
 
 {{ room_name|json_script:"room-name" }}
@@ -51,27 +53,16 @@ jQuery(document).ready(function($) {
     var ww = document.body.clientWidth;
     if (ww < 600) {
 
-      $('.perfil1').removeClass('col-1');
-      $('.perfil1').addClass('col-2');
+      $('.perfil1').css({'width':'100%'});
 
-      $('.mensagem1').removeClass('col-11');
-      $('.mensagem1').addClass('col-10');
-
-      console.log('widht menos 600')
     } else if (ww >= 601) {
-      $('.perfil1').removeClass('col-2');
-      $('.perfil1').addClass('col-1');
+      $('.perfil1').css({'width':'55%'});
 
-      $('.mensagem1').removeClass('col-10');
-      $('.mensagem1').addClass('col-11');
-
-      console.log('widht maior 600')
     };
   };
   $(window).resize(function(){
     alterClass();
   });
-  //Fire it when the page first loads:
   alterClass();
 });
 </script>

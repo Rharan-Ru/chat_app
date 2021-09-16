@@ -5,14 +5,10 @@ scroll.scrollTop = scroll.scrollHeight;
 var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
 var chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + "/ws/chat/" + roomName + '/');
 
-console.log(window.location.host)
-console.log(WebSocket)
-
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const user_Id = data.user_id
     const loggedUser = JSON.parse(document.getElementById('user_id').textContent)
-    console.log(data.user_profile)
     if (data.entrou){
         $('#chat-log').append("<p class='text-center m-0 text-white border bg-secondary' style='opacity:80%;' ><small>"+ data.entrou +"</small></p>")
         document.getElementById('num_users').innerHTML = roomName + ' - ' +data.num_users+ ' members'
@@ -20,10 +16,10 @@ chatSocket.onmessage = function(e) {
 
     if (data.message) {
         if (user_Id === loggedUser) {
-          $('#chat-log').append("<div class='m-0 mt-1 p-4 text-white' style='background:rgba(0,0,0,.9)'> <div class='row'> <div class='m-0 p-0 col-1 perfil1 row'> <img class='img-fluid ml-1 mr-1 rounded-circle' src='"+ data.user_profile +"' style='width:30px;height:30px;background:rgba(0,0,0,.9)'> <p class='m-0 text-left' style='opacity:none'> <strong>" + data.user_name + "</strong> </div> <div class='m-0 p-0 col-11 mensagem1'> <p class='m-0 p-0 ml-2 pl-2 text-left'>" + data.message + "</div></div></div>")
+          $('#chat-log').append("<div class='m-0 mt-1 p-0'> <div class='row m-0 p-0'> <div class='col-12 m-0 p-0'> <img class='float-left rounded-circle' src='"+ data.user_profile +"' style='width:30px;height:30px' alt=''> <p class='float-left ml-2'> <strong>"+ data.user_name +"</strong></p></div><div class='container rounded ml-0 pl-0' style='width:55%'> <p class='bg-dark float-left rounded text-card p-2' style='max-width:100%; min-width:15%'>"+ data.message +"</p></div></div></div>")
         }
         else {
-            $('#chat-log').append("<div class='m-0 mt-1 p-4 text-white' style='background:rgba(255,255,255,.9)'> <div class='row'> <div class='m-0 p-0 col-11 mensagem1'> <p class='m-0 p-0 mr-2 pr-2 text-body text-right'>" +data.message+ "</div> <div class='m-0 p-0 col-1 perfil1 row'> <img class='img-fluid ml-1 mr-1 rounded-circle' src='" + data.user_profile + "' style='width:30px;height:30px;background:rgba(0,0,0,.9)'> <p class='m-0 text-body text-right' style='opacity:none'> <strong>"+ data.user_name +"</strong></div></div></div>")
+            $('#chat-log').append("<div class='m-0 mt-1 p-0 '> <div class='row m-0 p-0 text-body'> <div class='col-12 m-0 p-0'> <img class='float-right rounded-circle' src='"+ data.user_profile +"' style='width:30px;height:30px' alt=''> <p class='float-right mr-2'> <strong>"+ data.user_name +"</strong></p></div><div class='container rounded mr-0 pr-0' style='width:55%'> <p class='bg-primary float-right rounded text-card p-2' style='max-width:100%;min-width:15%;'>"+ data.message +"</p></div></div></div>")
         }
     }
 

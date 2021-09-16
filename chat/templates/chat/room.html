@@ -38,9 +38,8 @@
 </div>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="row p-0 m-0">
-    <input type="text" class="form-control mb-3 required-field" style="width:92%" id="chat-message-input" maxlength="5000" placeholder="..." required>
-    <button class="text-center btn btn-success msg rounded-circle" style="height:10%;width:50px" id="chat-message-submit" type="submit" value="Send"><span class="material-icons">sender</span></button>
-
+    <input type="text" class="col-10 form-control mb-3 required-field" id="chat-message-input" maxlength="5000" placeholder="..." required>
+    <button class="col-2 btn btn-success msg" style="height:10%" id="chat-message-submit" type="submit" value="Send">Send</button>
 </div>
 
 {{ room_name|json_script:"room-name" }}

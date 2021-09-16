@@ -16,10 +16,10 @@ chatSocket.onmessage = function(e) {
 
     if (data.message) {
         if (user_Id === loggedUser) {
-          $('#chat-log').append("<div class='m-0 mt-1 p-0'> <div class='row m-0 p-0'> <div class='col-12 m-0 p-0'> <img class='float-left rounded-circle' src='"+ data.user_profile +"' style='width:30px;height:30px' alt=''> <p class='float-left ml-2'> <strong>"+ data.user_name +"</strong></p></div><div class='container rounded ml-0 pl-0' style='width:55%'> <p class='bg-dark float-left rounded text-card p-2' style='max-width:100%; min-width:15%'>"+ data.message +"</p></div></div></div>")
+          $('#chat-log').append("<div class='m-0 mt-1 p-0'> <div class='row m-0 p-0'> <div class='col-12 m-0 p-0'> <img class='float-left rounded-circle' src='"+ data.user_profile +"' style='width:30px;height:30px' alt=''> <p class='float-left ml-2'> <strong>"+ data.user_name +"</strong></p></div><div class='container rounded ml-0 pl-0 perfil1' style='width:55%'> <p class='bg-dark float-left rounded text-card p-2' style='max-width:100%; min-width:15%'>"+ data.message +"</p></div></div></div>")
         }
         else {
-            $('#chat-log').append("<div class='m-0 mt-1 p-0 '> <div class='row m-0 p-0 text-body'> <div class='col-12 m-0 p-0'> <img class='float-right rounded-circle' src='"+ data.user_profile +"' style='width:30px;height:30px' alt=''> <p class='float-right mr-2'> <strong>"+ data.user_name +"</strong></p></div><div class='container rounded mr-0 pr-0' style='width:55%'> <p class='bg-primary float-right rounded text-card p-2' style='max-width:100%;min-width:15%;'>"+ data.message +"</p></div></div></div>")
+            $('#chat-log').append("<div class='m-0 mt-1 p-0 '> <div class='row m-0 p-0 text-body'> <div class='col-12 m-0 p-0'> <img class='float-right rounded-circle' src='"+ data.user_profile +"' style='width:30px;height:30px' alt=''> <p class='float-right mr-2'> <strong>"+ data.user_name +"</strong></p></div><div class='container rounded mr-0 pr-0 perfil1' style='width:55%'> <p class='bg-primary float-right rounded text-card p-2' style='max-width:100%;min-width:15%;'>"+ data.message +"</p></div></div></div>")
         }
     }
 

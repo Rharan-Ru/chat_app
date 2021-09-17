@@ -1,9 +1,7 @@
 from django.shortcuts import render
 from django.views import View
-from .models import ChatRoom, Chat
+from .models import ChatRoom, Chat, Profile
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.serializers import get_serializer
-from django.utils.text import wrap
 
 
 class Index(LoginRequiredMixin, View):

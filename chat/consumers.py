@@ -23,7 +23,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         for user in num_users:
             perfil = await database_sync_to_async(Profile.objects.get)(user=user['id'])
             usuarios.append({'id': user['id'], 'username': user['username'], 'image': perfil.image.url})
-        print(usuarios)
 
         # Join room group
         await self.channel_layer.group_add(
@@ -59,7 +58,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         for user in num_users:
             perfil = await database_sync_to_async(Profile.objects.get)(user=user['id'])
             usuarios.append({'id': user['id'], 'username': user['username'], 'image': perfil.image.url})
-        print(usuarios)
 
         await self.channel_layer.group_discard(
             self.room_group_name,

@@ -1,8 +1,9 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
+from asgiref.sync import async_to_sync
 from .models import ChatRoom, Chat, Profile
-from django.core.serializers import serialize
+from time import sleep
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -11,6 +12,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = 'chat_%s' % self.room_name
         self.user_name = self.scope['user'].username
 
+        room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
+        await database_sync_to_async(room.users.add)(self.scope['user'])
+        await database_sync_to_async(room.save)()
+
+        num_users = await database_sync_to_async(room.users.all().values)()
+        num_users = await database_sync_to_async(list)(num_users)
+        usuarios = []
+
+        for user in num_users:
+            perfil = await database_sync_to_async(Profile.objects.get)(user=user['id'])
+            usuarios.append({'id': user['id'], 'username': user['username'], 'image': perfil.image.url})
+        print(usuarios)
+
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -18,13 +32,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         await self.accept()
-        room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
-        await database_sync_to_async(room.users.add)(self.scope['user'])
-        await database_sync_to_async(room.save)()
-
-        num_users = await database_sync_to_async(room.users.all)()
-        num_users = await database_sync_to_async(len)(num_users)
-
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -33,22 +40,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'user_id': '',
                 'user_name': '',
                 'entrou': f'{self.scope["user"].username} entrou na sala',
-                'num_users': num_users
+                'num_users': usuarios
             }
         )
 
     async def disconnect(self, close_code):
         # Leave room group
-        await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name
-        )
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+
         room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
         await database_sync_to_async(room.users.remove)(self.scope['user'])
         await database_sync_to_async(room.save)()
 
-        num_users = await database_sync_to_async(room.users.all)()
-        num_users = await database_sync_to_async(len)(num_users)
+        num_users = await database_sync_to_async(room.users.all().values)()
+        num_users = await database_sync_to_async(list)(num_users)
+        usuarios = []
+
+        for user in num_users:
+            perfil = await database_sync_to_async(Profile.objects.get)(user=user['id'])
+            usuarios.append({'id': user['id'], 'username': user['username'], 'image': perfil.image.url})
+        print(usuarios)
+
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
 
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -58,7 +74,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'user_id': '',
                 'user_name': '',
                 'entrou': f'{self.scope["user"].username} saiu da sala',
-                'num_users': num_users
+                'num_users': usuarios
             }
         )
 
@@ -112,3 +128,58 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'entrou': entrou,
                 'num_users': num_users
             }))
+
+
+class RoomConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        print('CONECTANDO A HOME')
+
+        salas = await database_sync_to_async(ChatRoom.objects.values)()
+        salas = await database_sync_to_async(list)(salas)
+        for x in salas:
+            room = await database_sync_to_async(ChatRoom.objects.get)(name=x['name'])
+            num_users = await database_sync_to_async(room.users.all)()
+            num_users = await database_sync_to_async(len)(num_users)
+            x['users'] = num_users
+
+        await self.accept()
+
+        self.room_group_name = 'sala'
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name,
+        )
+
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'sala_all',
+                'salas': salas
+            }
+        )
+
+    async def disconnect(self, code):
+        print('DESCONECTANDO DA HOME')
+        salas = await database_sync_to_async(ChatRoom.objects.values)()
+        salas = await database_sync_to_async(list)(salas)
+        for x in salas:
+            room = await database_sync_to_async(ChatRoom.objects.get)(name=x['name'])
+            num_users = await database_sync_to_async(room.users.all)()
+            num_users = await database_sync_to_async(len)(num_users)
+            x['users'] = num_users
+
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'sala_all',
+                'salas': salas
+            }
+        )
+
+    async def sala_all(self, event):
+        salas = event['salas']
+        print(salas)
+
+        await self.send(text_data=json.dumps({
+            'salas': salas,
+        }))

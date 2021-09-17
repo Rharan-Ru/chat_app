@@ -1,4 +1,5 @@
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
 var scroll = document.getElementById('position')
 scroll.scrollTop = scroll.scrollHeight;
 
@@ -9,9 +10,14 @@ chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const user_Id = data.user_id
     const loggedUser = JSON.parse(document.getElementById('user_id').textContent)
+    $('#lista_users').empty();
+    for (let x in data.num_users) {
+        document.getElementById('lista_users').innerHTML += '<div class="row m-0 p-0 mt-1 bg-dark text-white"> <div class="col-2 p-1 m-0"> <img class="mx-auto d-block rounded-circle" src="'+data.num_users[x]['image']+'" style="width:30px;height:30px" alt=""> </div><div class="p-1 ml-2" style="justify-content: center;align-items: center;display: flex"> <p class="p-0 m-0">'+data.num_users[x]['username']+'</p></div></div>'
+    }
+
     if (data.entrou){
         $('#chat-log').append("<p class='text-center m-0 text-white border bg-secondary' style='opacity:80%;' ><small>"+ data.entrou +"</small></p>")
-        document.getElementById('num_users').innerHTML = roomName + ' - ' +data.num_users+ ' members'
+        document.getElementById('num_users').innerHTML = roomName + ' - ' + data.num_users.length+ ' members'
     }
 
     if (data.message) {

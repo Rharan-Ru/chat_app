@@ -22,6 +22,8 @@ class Room(LoginRequiredMixin, View):
         else:
             room = ChatRoom(name=room_name)
             room.save()
+        room.users.add(request.user)
+        room.save()
         return render(request, 'chat/room.html', {
             'room_name': room_name,
             'chats': chats,

@@ -13,6 +13,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.user_name = self.scope['user'].username
 
         room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
+
         await database_sync_to_async(room.users.add)(self.scope['user'])
         await database_sync_to_async(room.save)()
 

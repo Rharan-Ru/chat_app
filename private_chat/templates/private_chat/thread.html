@@ -1,0 +1,56 @@
+{% extends 'navbar.html' %}
+{% load static %}
+{% block content %}
+<<div class="row p-0 m-0">
+    <div class="col-sm-9 mt-5">
+        <div class="p-0 m-0 card bg-dark text-white" id="position" style="height:70vh; overflow-y: auto;background-image: url({% static 'steven_bg08.gif' %});background-size:cover;background-position:center;scroll-behavior: smooth">
+            <div class="card-img-overlay p-1" id="chat-log">
+                {% for chat in messages %}
+                {% if request.user == chat.sender_user %}
+                <div class='m-0 mt-1 p-0'>
+                    <div class="row m-0 p-0">
+                        <div class="col-12 m-0 p-0">
+                            <img class="float-left rounded-circle" src="{{ chat.sender_user.profile.image.url }}" style="width:30px;height:30px" alt="">
+                            <p class="float-left ml-2"><strong>{{ chat.sender_user }}</strong></p>
+                        </div>
+                        <div class="container rounded ml-0 pl-0 perfil1" style="">
+                            <p class="bg-dark float-left rounded text-card p-2" style="max-width:100%; min-width:15%">{{ chat.text }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class='text-body m-0 mt-1 p-0'>
+                    <div class="row m-0 p-0">
+                        <div class="col-12 m-0 p-0">
+                            <img class="float-right rounded-circle" src="{{ chat.sender_user.profile.image.url }}" style="width:30px;height:30px" alt="">
+                            <p class="float-right mr-2"><strong>{{ chat.sender_user }}</strong></p>
+                        </div>
+                        <div class="container rounded mr-0 pr-0 perfil1" style="">
+                            <p class="bg-primary float-right rounded text-card p-2" style="max-width:100%;min-width:15%;">{{ chat.text }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row p-0 m-0">
+            <input type="text" class="col-10 form-control mb-3 required-field" id="chat-message-input" maxlength="5000" placeholder="..." required>
+            <button class="col-2 btn btn-success msg" style="height:10%" onclick="alterClass();" id="chat-message-submit" type="submit" value="Send">Send</button>
+        </div>
+    </div>
+    <div class="col-sm-3 mt-5 m-0 p-0">
+        <div class="p-0 m-0 card bg-dark" id="lista_users" style="height:70vh; overflow-y: auto;background-image: url({% static 'steven_bg08.gif' %});background-size:cover;background-position:center;scroll-behavior: smooth">
+
+        </div>
+        <p class="text-center text-uppercase m-0 p-1"><strong id="num_users">{{room.name}} - {{room.users.all.count}} members</strong></p>
+    </div>
+</div>
+
+{{ thread.receiver.pk|json_script:"receiver_name"}}
+{{ request.user.id|json_script:"user_id" }}
+{{ thread.pk|json_script:"room-pk" }}
+
+<script src="{% static 'private.js'%}"></script>
+
+{% endblock content %}

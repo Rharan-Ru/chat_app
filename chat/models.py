@@ -5,11 +5,13 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 
+# Simple user profile
 class Profile(models.Model):
     user = models.OneToOneField(User, primary_key=True, related_name='profile', on_delete=models.CASCADE, blank=True)
     name = models.CharField(max_length=50, blank=True, null=True)
     image = models.ImageField(upload_to='img_profile/', default="img_profile/default.jpg", blank=True)
 
+    # def method to create a user profile when some new user is created
     @receiver(post_save, sender=User)  # add this
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
@@ -20,6 +22,7 @@ class Profile(models.Model):
         instance.profile.save()
 
 
+# Class to save chats menssages
 class Chat(models.Model):
     content = models.CharField(max_length=1000)
     timestamp = models.DateTimeField(default=timezone.now)
@@ -27,6 +30,7 @@ class Chat(models.Model):
     room = models.ForeignKey('ChatRoom', on_delete=models.CASCADE)
 
 
+# Class to create a chatroom
 class ChatRoom(models.Model):
     name = models.CharField(max_length=255)
     users = models.ManyToManyField(User)

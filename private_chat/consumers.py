@@ -1,9 +1,12 @@
 import json
+
+from django.contrib.auth.models import User
+
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from .models import ThreadModel, MessageModel
+
+from private_chat.models import ThreadModel, MessageModel
 from chat.models import Profile
-from django.contrib.auth.models import User
 
 
 class PrivateChatConsumer(AsyncWebsocketConsumer):

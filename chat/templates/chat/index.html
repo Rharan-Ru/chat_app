@@ -2,7 +2,18 @@
 {% load static %}
 
 {% block content %}
-<div class="container-fluid text-center mx-auto form-group p-3">
+<style>
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+body {
+    background-color: black
+}
+</style>
+
+
+<div class="text-white container-fluid text-center mx-auto form-group p-3">
     <h4>What chat room would you like to enter?</h4>
     <input class="form-control" id="room-name-input" type="text" size="100" placeholder="Enter a ChatRoom name"><br>
     <button class=" btn-dark btn-lg btn-block" id="room-name-submit" type="button">Enter</button>

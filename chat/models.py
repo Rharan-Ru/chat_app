@@ -34,3 +34,4 @@ class Chat(models.Model):
 class ChatRoom(models.Model):
     name = models.CharField(max_length=255)
     users = models.ManyToManyField(User)
+    image = models.ImageField(upload_to='img_room/', default="img_room/default.jpg", blank=True)

@@ -1,9 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from asgiref.sync import async_to_sync
 from .models import ChatRoom, Chat, Profile
-from time import sleep
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -49,8 +47,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
 
         room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
-        await database_sync_to_async(room.users.remove)(self.scope['user'])
-        await database_sync_to_async(room.save)()
 
         num_users = await database_sync_to_async(room.users.all().values)()
         num_users = await database_sync_to_async(list)(num_users)
@@ -131,7 +127,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 class RoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        print('CONECTANDO A HOME')
 
         salas = await database_sync_to_async(ChatRoom.objects.values)()
         salas = await database_sync_to_async(list)(salas)
@@ -158,7 +153,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
         )
 
     async def disconnect(self, code):
-        print('DESCONECTANDO DA HOME')
         salas = await database_sync_to_async(ChatRoom.objects.values)()
         salas = await database_sync_to_async(list)(salas)
         for x in salas:
@@ -175,9 +169,13 @@ class RoomConsumer(AsyncWebsocketConsumer):
             }
         )
 
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name,
+        )
+
     async def sala_all(self, event):
         salas = event['salas']
-        print(salas)
 
         await self.send(text_data=json.dumps({
             'salas': salas,

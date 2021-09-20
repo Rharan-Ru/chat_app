@@ -17,9 +17,10 @@ chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     $('#lista_salas').empty();
     for (let x in data.salas) {
-        document.getElementById('lista_salas').innerHTML += '<div class="col-lg-4" style="background-image: "> <a href="/chat/'+data.salas[x]['name']+'/"> <div class="card bg-dark"> <img src="/static/steven_bg08.gif" class="card-img embed-responsive" alt="..." style="height:20vh;object-fit:cover"> <div class="card-img-overlay" style="justify-content: center;align-items: center;display: flex"> <h3 class="card-text text-uppercase text-body">'+data.salas[x]['name']+'</h3> </div><p class="text-center text-white" id="'+data.salas[x]['name']+'">'+data.salas[x]['users']+' pessoas no chat</p></div></a> </div>'
+        document.getElementById('lista_salas').innerHTML += '<div class="col-md-4 mt-3"> <a href="'+data.salas[x]['name']+'/" class="room-link" style="text-decoration:none"> <div class="card" style="background-color:#343a406e"> <div class="card-horizontal p-2"> <div class="img-square-wrapper embed-responsive img-fluid" style="width:150px; height:64px;"> <img class="embed-responsive-item img-fluid rounded" src="/media/'+data.salas[x]['image']+'" alt="Card image cap" style="width:200px;object-fit: cover"> </div><div class="card-body text-white p-0 m-0 ml-1"> <h5 class="card-title p-0 m-0">'+ data.salas[x]['name'] +'</h4> <p class="m-0 p-0" id="'+data.salas[x]['name']+'">'+ data.salas[x]['users'] +' users online</p></div></div></div> </a> </div>'
         var name = data.salas[x]['name']
-        document.getElementById(name).innerHTML = data.salas[x]['users'] + ' pessoas no chat'
+        console.log(data.salas[x]['image'])
+        document.getElementById(name).innerHTML = data.salas[x]['users'] + ' users online'
 
     }
 }

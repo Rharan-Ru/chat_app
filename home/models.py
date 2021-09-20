@@ -10,6 +10,22 @@ class Post(models.Model):
     thumb = models.ImageField(upload_to='img_post/', blank=True)
     created_on = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    views = models.ManyToManyField(User, related_name='views')
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.CharField(max_length=50, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='replies')
+
+    def children(self):
+        return Comment.objects.filter(parent=self)
+
+    def is_parent(self):
+        if self.parent is None:
+            return True
+        return False

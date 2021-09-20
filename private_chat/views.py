@@ -1,5 +1,6 @@
 from django.views import View
 from .models import ThreadModel, MessageModel
+from chat.models import ChatRoom
 from chat.models import Profile
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
@@ -9,8 +10,11 @@ from django.db.models import Q
 class ListThreads(View):
     def get(self, request, *args, **kwargs):
         threads = ThreadModel.objects.filter(Q(user=request.user) | Q(receiver=request.user))
+        salas_user = ChatRoom.objects.filter(users=request.user)
+
         context = {
             'threads': threads,
+            'salas_user': salas_user
         }
         return render(request, 'private_chat/inbox.html', context)
 

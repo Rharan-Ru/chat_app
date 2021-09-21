@@ -21,6 +21,7 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.CharField(max_length=50, blank=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='replies')
+    reply_author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='reply_author')
 
     def children(self):
         return Comment.objects.filter(parent=self)

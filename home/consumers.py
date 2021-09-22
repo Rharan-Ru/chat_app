@@ -64,7 +64,6 @@ class CommentsConsumer(AsyncWebsocketConsumer):
             span_comment = text_data_json['span_comment']
 
             rep_author = await database_sync_to_async(User.objects.get)(username=reply_author)
-            await database_sync_to_async(print)(rep_author.username)
 
             parent_comment = await database_sync_to_async(Comment.objects.get)(pk=parent_id)
             post = await database_sync_to_async(Post.objects.get)(pk=self.post_pk)

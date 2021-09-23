@@ -1,0 +1,70 @@
+{% block content %}
+<div class="p-1 rounded mt-2" style="background-color:#343a406e">
+    <div class="row p-0 m-0">
+        <input type="text" class="col-10 form-control mb-3 required-field" style="border:none; background-color:black; color:white" id="chat-message-input" maxlength="5000" placeholder="..." required>
+        <button class="col-2 btn btn-dark msg" style="height:10%" onclick="alterClass();" id="chat-message-submit" type="submit" value="Send"> > </button>
+    </div>
+
+    <div class="container-fluid p-0 m-0" id="commentSection">
+        {% for com in post.comments.all reversed %}
+        {% if com.is_parent %}
+        <div class="m-0 p-0">
+            <div class="m-0 p-0 row" id="comment{{com.pk}}">
+                <div class="m-0 p-0 col-1 ">
+                    <img class="mx-auto d-block mt-1 img-fluid rounded embed-responsive-item img-teste" src="{{com.author.profile.image.url}}" alt="" style="width:50px;height:40px;object-fit:cover">
+                </div>
+                <div class="col-11 bg-dark text-white p-1 mt-1 card">
+                    <p class="m-0 p-0"><strong>{{com.author}}</strong></p>
+                    <p class="m-0 p-0">{{com.comment}}</p>
+                </div>
+                <span class="col-1 m-0 p-0"></span>
+                <div class="col-11 m-0 p-0" id="accordion">
+                    <a class="reply m-0 p-0" data-toggle="collapse" data-target="#collapseOne{{com.pk}}"><i class="bi bi-reply-fill"></i><small>Reply</small></a>
+                    <div class="p-0 m-0 collapse" aria-labelledby="headingOne" data-parent="#accordion" id="collapseOne{{com.pk}}">
+                        <form action="" class="form-group m-0 p-0 row">
+                            <input type="text" class="chat-message-input-reply col-10 form-control mb-3 required-field {{com.author}}" id="{{com.pk}}" maxlength="5000" placeholder="..." required>
+                            <button class="chat-message-submit-reply col-2 btn btn-dark msg" style="height:10%" type="submit" value="Send"> > </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% if com.replies.all.count > 2 %}
+            <a class="btn btn-link text-white" id="count{{com.pk}}" style="display: inline-block" data-toggle="collapse" data-target="#collapseTwo{{com.pk}}" aria-controls="collapseTwo">See all comments ({{com.replies.all.count}})</a>
+            {% else %}
+            <a class="btn btn-link text-white" id="count{{com.pk}}" style="display: none" data-toggle="collapse" data-target="#collapseTwo{{com.pk}}" aria-controls="collapseTwo">See all comments ({{com.replies.all.count}})</a>
+            {% endif %}
+            <div class="col-12 m-0 p-0" id="accordion{{com.pk}}">
+                {% for reply in com.replies.all %}
+                {% if com.replies.all.count > 2 %}
+                <div class="collapse collapseTwo{{com.pk}} texte{{com.pk}}" id="collapseTwo{{com.pk}}" aria-labelledby="headingOne" data-parent="#accordion{{com.pk}}">
+                {% else %}
+                <div class="collapse collapseTwo{{com.pk}} texte{{com.pk}} show" id="collapseTwo{{com.pk}}" aria-labelledby="headingOne" data-parent="#accordion{{com.pk}}">
+                {% endif %}
+                    <div class="m-0 ml-3 p-0 row" id="replies">
+                        <div class="m-0 p-0 col-1 ">
+                            <img class="mx-auto d-block mt-1 img-fluid rounded embed-responsive-item img-teste2" src="{{reply.author.profile.image.url}}" alt="" style="width:30px;height:30px;object-fit:cover">
+                        </div>
+                        <div class="col-11 text-white p-1 mt-1 card" style="background-color:#bd2130e6">
+                            <p class="m-0 p-0"><strong>{{reply.author}}</strong></p>
+                            <p class="m-0 p-0"><a class="mr-2">{{reply.reply_author}}</a>{{reply.comment}}</p>
+                        </div>
+                        <span class="col-1 m-0 p-0"></span>
+                        <div class="col-11 m-0 p-0" id="accordion{{reply.pk}}">
+                            <a class="reply m-0 p-0" data-toggle="collapse" data-target="#collapseOne{{reply.pk}}"><i class="bi bi-reply-fill"></i><small>Reply</small></a>
+                            <div class="p-0 m-0 collapse" aria-labelledby="headingOne" data-parent="#accordion" id="collapseOne{{reply.pk}}">
+                                <form action="" class="form-group m-0 p-0 row">
+                                    <input type="text" class="chat-message-input-reply col-10 form-control mb-3 required-field {{reply.author}}" id="{{com.pk}}" maxlength="5000" placeholder="..." required>
+                                    <button class="chat-message-submit-reply col-2 btn btn-dark msg" style="height:10%" id="" type="submit" value="Send"> > </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

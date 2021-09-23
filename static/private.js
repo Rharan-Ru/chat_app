@@ -42,9 +42,16 @@ document.querySelector('#chat-message-input').onkeyup = function(e) {
 document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
     const message = messageInputDom.value;
-    chatSocket.send(JSON.stringify({
-        'message': message,
-        'receiver_name': receiver_name,
-    }));
+    if (message.length > 0) {
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'receiver_name': receiver_name
+        }));
+        messageInputDom.value = '';
+        document.getElementById('input-req').innerHTML = ''
+    }
+    else {
+        document.getElementById('input-req').innerHTML = 'O campo acima precisa ser preenchido'
+    }
     messageInputDom.value = '';
 };

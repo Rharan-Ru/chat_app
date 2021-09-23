@@ -11,42 +11,43 @@
     }
 </style>
 {% if threads %}
-<div class="container">
-    <div class="row">
-        {% for th in threads %}
-        <div class="col-md-8 mt-3">
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-lg-8 mt-2">
+            {% for th in threads %}
             <a href="{% url 'thread' th.pk %}" class="m-0 p-0" style="text-decoration:none">
-            <div class="card rounded text-white" style="background-color:#343a406e">
-                <div class="card-horizontal rounded p-2">
-                    <div class="img-square-wrapper embed-responsive rounded" style="width:90px;height:55px;object-fit:cover">
-                        {% if th.receiver == request.user %}
+                <div class="card rounded text-white mt-2" style="background-color:#343a406e">
+                    <div class="card-horizontal rounded p-2">
+                        <div class="img-square-wrapper embed-responsive rounded" style="width:90px;height:55px;object-fit:cover">
+                            {% if th.receiver == request.user %}
                             <img class="embed-responsive-item" src="{{th.user.profile.image.url}}" alt="Card image cap" style="width:90px;height:55px;object-fit:cover">
-                        {% else %}
+                            {% else %}
                             <img class="embed-responsive-item" src="{{th.receiver.profile.image.url}}" alt="Card image cap" style="width:90px;height:55px;object-fit:cover">
-                        {% endif %}
-                    </div>
-                    <div class="card-body p-0 m-0 ml-1">
-                        {% if th.receiver == request.user %}
-                        <p class="card-text m-0 p-0"><strong>{{th.user}}</strong></p>
-                        <p class="m-0 p-0" style="font-size:15px">Logica futura para mostrar a ultima mensagem do usu...</p>
-                        {% else %}
-                        <p class="card-text m-0 p-0"><strong>{{th.receiver}}</strong></p>
-                        <p class="m-0 p-0" style="font-size:15px">Logica futura para mostrar a ultima mensagem do usu...</p>
-                        {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="card-body p-0 m-0 ml-1">
+                            {% if th.receiver == request.user %}
+                            <p class="card-text m-0 p-0"><strong>{{th.user}}</strong></p>
+                            <p class="m-0 p-0" style="font-size:15px">Logica futura para mostrar a ultima mensagem do usu...</p>
+                            {% else %}
+                            <p class="card-text m-0 p-0"><strong>{{th.receiver}}</strong></p>
+                            <p class="m-0 p-0" style="font-size:15px">Logica futura para mostrar a ultima mensagem do usu...</p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-                </a>
+            </a>
+            {% endfor %}
         </div>
-        {% endfor %}
-        <div class="col-md-4 mt-3 rounded" id="side-bar">
+
+        <div class="col-lg-4 mt-3 rounded" id="side-bar">
             <p class="text-center p-3 m-0 mb-2 rounded text-white" style="background-color:#343a406e"><strong>Top chat rooms</strong></p>
             <div class="card" style="background-color:#343a406e">
                 <div class="card-body row m-0 p-0">
                     {% for sala in salas_user %}
                     <a class="col-12 row text-white m-0 p-0 salas_links" style="text-decoration:none" href="/chat/{{sala.name}}/">
-                        <div class="col-3 p-2 ml-2" style="font-size:13px">{{sala.users.count}} users</div>
                         <div class="col-8 p-2"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover"> {{ sala.name }}</div>
+                        <div class="col-3 p-2 ml-2" style="font-size:13px">{{sala.users.count}} users</div>
                     </a>
                     {% endfor %}
                 </div>

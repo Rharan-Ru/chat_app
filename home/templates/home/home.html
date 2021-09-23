@@ -45,7 +45,7 @@
             <div class="card border" style="background-color:#343a406e">
                 <img class="card-img-top p-0 m-0" src="{% static 'steven_bg08.gif' %}" alt="Card image cap">
                 <div class="card-body row m-0 p-0">
-                    {% for sala in salas %}
+                    {% for sala in salas|slice:'0:10' %}
                     <a class="col-12 mt-2 p-1 mb-2 row text-white m-0 p-0 salas_links" style="text-decoration:none" href="/chat/{{sala.name}}/">
                         <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover"> {{ sala.name }}</div>
                         <div class="col-4 p-0"> {{sala.users.all.count }} members</div>

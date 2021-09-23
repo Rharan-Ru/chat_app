@@ -45,11 +45,15 @@ class ThreadView(LoginRequiredMixin, UserPassesTestMixin, View):
         thread = ThreadModel.objects.get(pk=pk)
         messages = MessageModel.objects.filter(thread__pk__contains=pk)
         threads = ThreadModel.objects.filter(Q(user=request.user) | Q(receiver=request.user))
+        mess = MessageModel.objects.all().order_by('-id')[0:1]
+        salas_user = ChatRoom.objects.filter(users=request.user)
 
         context = {
             'thread': thread,
             'threads': threads,
             'messages': messages,
+            'mess': mess,
+            'salas_user': salas_user,
         }
         return render(request, 'private_chat/thread.html', context)
 

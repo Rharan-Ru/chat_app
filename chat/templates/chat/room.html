@@ -2,9 +2,39 @@
 {% load static %}
 
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+<style>
+    body {
+        background-color: black
+    }
+</style>
+
+<div class="offcanvas offcanvas-end bg-dark" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header text-white">
+        <h5 class="" id="offcanvasRightLabel">About {{room.name}} <a class="btn btn-danger" type="submit" href="{% url 'index' %}" onclick="sair()">sair</a></h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body text-white" id="lista_users" style="overflow-y: auto;background-image: url({% static 'default.jpg' %});background-size:cover;background-position:center;scroll-behavior: smooth">
+        {% for user in room.users.all %}
+        <div class="bg-warning row p-0 m-0 mt-1 rounded">
+            <div class="col-1 p-1 m-0">
+                <img class="rounded" src="{{user.profile.image.url}}" style="width:30px;height:30px;object-fit:cover" alt="">
+            </div>
+            <p class="col-8 text-white p-1 ms-2 m-0 text-body"><strong>{{ user }}</strong></p>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
 
 <div class="row p-0 m-0">
-    <div class="col-sm-9 mt-5">
+    <div class="col-12 d-grid gap-2 d-md-flex justify-content-end m-0 mt-2" >
+        <button class="btn btn-dark" style="width:40px;" id="side-bar2-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="bi bi-list"></i></button>
+    </div>
+    <div class="col-lg-9 mt-2">
         <div class="p-0 m-0 card bg-dark text-white" id="position" style="height:70vh; overflow-y: auto;background-image: url({% static 'steven_bg08.gif' %});background-size:cover;background-position:center;scroll-behavior: smooth">
             <div class="card-img-overlay p-1" id="chat-log">
                 {% for chat in chats %}
@@ -36,25 +66,41 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="row p-0 m-0">
-            <input type="text" class="col-10 form-control mb-3 required-field" id="chat-message-input" maxlength="5000" placeholder="..." required>
-            <button class="col-2 btn btn-success msg" style="height:10%" onclick="alterClass();" id="chat-message-submit" type="submit" value="Send">Send</button>
-        </div>
-    </div>
-    <div class="col-sm-3 mt-5 m-0 p-0">
-        <div class="p-0 m-0 card bg-dark" id="lista_users" style="height:70vh; overflow-y: auto;background-image: url({% static 'steven_bg08.gif' %});background-size:cover;background-position:center;scroll-behavior: smooth">
 
+        <div class="input-group">
+            <input class="form-control border-end-0 border bg-dark text-white" id="chat-message-input" maxlength="5000" placeholder="..." required="true">
+            <span class="input-group-append">
+                <button class="btn btn-outline-secondary bg-white border-bottom-0 border ms-n5" onclick="alterClass();" id="chat-message-submit" type="submit" value="Send">
+                    <i class="bi bi-arrow-right-square-fill"></i>
+                </button>
+            </span>
         </div>
-        <p class="text-center text-uppercase m-0 p-1"><strong id="num_users">{{room.name}} - {{room.users.all.count}} members</strong></p>
+        <p id="input-req" class="text-white text-center"></p>
+    </div>
+
+
+    <div class="col-lg-3 mt-2 m-0" id="side-bar2">
+        <h5 class="bg-dark text-white text-center p-0 m-0">all users <a class="btn btn-danger" type="submit" href="{% url 'index' %}" onclick="sair()">sair</a></h5>
+        <div class="p-0 m-0 card bg-dark" id="lista_users2" style="height:70vh; overflow-y: auto;background-image: url({% static 'default.jpg' %});background-size:cover;background-position:center;scroll-behavior: smooth">
+            {% for user in room.users.all %}
+            <div class="bg-warning row p-0 m-0 mt-1 rounded">
+                <div class="col-1 p-1 m-0">
+                    <img class="rounded" src="{{user.profile.image.url}}" style="width:30px;height:30px;object-fit:cover" alt="">
+                </div>
+                <p class="col-8 text-white p-1 ms-2 m-0 text-body"><strong>{{ user }}</strong></p>
+            </div>
+            {% endfor %}
+        </div>
+        <p class="text-center text-uppercase m-0 p-1 text-white"><strong id="num_users">{{room.name}} - {{room.users.all.count}} members</strong></p>
     </div>
 </div>
-
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 {{ room_name|json_script:"room-name" }}
 {{ request.user.id|json_script:"user_id" }}
 
 <script src="{% static 'room.js' %}"></script>
+<script src="{% static 'sidebar.js' %}"></script>
+
 <script>
 jQuery(document).ready(function($) {
   var alterClass = function() {

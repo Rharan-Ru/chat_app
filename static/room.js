@@ -6,6 +6,7 @@ scroll.scrollTop = scroll.scrollHeight;
 var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
 var chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + "/ws/chat/" + roomName + '/');
 
+
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const user_Id = data.user_id
@@ -15,8 +16,10 @@ chatSocket.onmessage = function(e) {
         $('#chat-log').append("<p class='text-center m-0 text-white border bg-secondary' style='opacity:80%;' ><small>"+ data.entrou +"</small></p>")
         document.getElementById('num_users').innerHTML = roomName + ' - ' + data.num_users.length+ ' members'
         $('#lista_users').empty();
+        $('#lista_users2').empty();
         for (let x in data.num_users) {
-            document.getElementById('lista_users').innerHTML += '<div class="row m-0 p-0 mt-1 bg-dark text-white"> <div class="col-2 p-1 m-0"> <img class="mx-auto d-block rounded-circle" src="'+data.num_users[x]['image']+'" style="width:30px;height:30px" alt=""> </div><div class="p-1 ml-2" style="justify-content: center;align-items: center;display: flex"> <p class="p-0 m-0">'+data.num_users[x]['username']+'</p></div></div>'
+            document.getElementById('lista_users').innerHTML += '<div class="bg-warning row p-0 m-0 mt-1 rounded"> <div class="col-1 p-1 m-0"> <img class="rounded" src="'+data.num_users[x]['image']+'" style="width:30px;height:30px;object-fit:cover" alt=""> </div><p class="col-8 text-white p-1 ms-2 m-0 text-body"><strong>'+data.num_users[x]['username']+'</strong></p></div>'
+            document.getElementById('lista_users2').innerHTML += '<div class="bg-warning row p-0 m-0 mt-1 rounded"> <div class="col-1 p-1 m-0"> <img class="rounded" src="'+data.num_users[x]['image']+'" style="width:30px;height:30px;object-fit:cover" alt=""> </div><p class="col-8 text-white p-1 ms-2 m-0 text-body"><strong>'+data.num_users[x]['username']+'</strong></p></div>'
         }
     }
 
@@ -48,8 +51,20 @@ document.querySelector('#chat-message-input').onkeyup = function(e) {
 document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
     const message = messageInputDom.value;
-    chatSocket.send(JSON.stringify({
-        'message': message,
-    }));
-    messageInputDom.value = '';
+    if (message.length > 0) {
+        chatSocket.send(JSON.stringify({
+            'message': message,
+        }));
+        messageInputDom.value = '';
+        document.getElementById('input-req').innerHTML = ''
+    }
+    else {
+        document.getElementById('input-req').innerHTML = 'O campo acima precisa ser preenchido'
+    }
 };
+
+function sair() {
+    chatSocket.send(JSON.stringify({
+            'sair': 'sair',
+        }));
+}

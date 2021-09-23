@@ -11,18 +11,30 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.user_name = self.scope['user'].username
 
         room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
-
-        await database_sync_to_async(room.users.add)(self.scope['user'])
-        await database_sync_to_async(room.save)()
-
         num_users = await database_sync_to_async(room.users.all().values)()
         num_users = await database_sync_to_async(list)(num_users)
+
+        ja_esta = False
+        for user in num_users:
+            if self.scope['user'].id == user['id']:
+                ja_esta = True
+
+        if ja_esta:
+            pass
+        else:
+            await database_sync_to_async(room.users.add)(self.scope['user'])
+            await database_sync_to_async(room.save)()
+
+        room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
+        num_users = await database_sync_to_async(room.users.all().values)()
+        num_users = await database_sync_to_async(list)(num_users)
+
         usuarios = []
 
         for user in num_users:
             perfil = await database_sync_to_async(Profile.objects.get)(user=user['id'])
             usuarios.append({'id': user['id'], 'username': user['username'], 'image': perfil.image.url})
-
+        print(usuarios)
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -30,77 +42,88 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         await self.accept()
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': '',
-                'user_id': '',
-                'user_name': '',
-                'entrou': f'{self.scope["user"].username} entrou na sala',
-                'num_users': usuarios
-            }
-        )
+
+        if ja_esta:
+            print('user já esta')
+            pass
+        else:
+            print('user adicionado')
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': '',
+                    'user_id': '',
+                    'user_name': '',
+                    'entrou': f'{self.scope["user"].username} entrou na sala',
+                    'num_users': usuarios
+                }
+            )
 
     async def disconnect(self, close_code):
         # Leave room group
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-
-        room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
-
-        num_users = await database_sync_to_async(room.users.all().values)()
-        num_users = await database_sync_to_async(list)(num_users)
-        usuarios = []
-
-        for user in num_users:
-            perfil = await database_sync_to_async(Profile.objects.get)(user=user['id'])
-            usuarios.append({'id': user['id'], 'username': user['username'], 'image': perfil.image.url})
-
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
 
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': '',
-                'user_id': '',
-                'user_name': '',
-                'entrou': f'{self.scope["user"].username} saiu da sala',
-                'num_users': usuarios
-            }
-        )
-
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        self.user_id = self.scope['user'].id
-        self.user_name = self.scope['user'].username
-
-        user_profile = await database_sync_to_async(Profile.objects.get)(user=self.scope['user'])
-
         room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
-        chat = Chat(
-            content=message,
-            user=self.scope['user'],
-            room=room,
-        )
-        await database_sync_to_async(chat.save)()
 
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'user_id': self.user_id,
-                'user_name': self.user_name,
-                'user_profile': user_profile.image.url,
-            }
-        )
+        if 'sair' in text_data_json:
+            await database_sync_to_async(room.users.remove)(self.scope['user'])
+            print('usuario saiu')
+
+            num_users = await database_sync_to_async(room.users.all().values)()
+            num_users = await database_sync_to_async(list)(num_users)
+            usuarios = []
+
+            for user in num_users:
+                perfil = await database_sync_to_async(Profile.objects.get)(user=user['id'])
+                usuarios.append({'id': user['id'], 'username': user['username'], 'image': perfil.image.url})
+
+            await self.channel_layer.group_discard(
+                self.room_group_name,
+                self.channel_name
+            )
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': '',
+                    'user_id': '',
+                    'user_name': '',
+                    'entrou': f'{self.scope["user"].username} saiu da sala',
+                    'num_users': usuarios
+                }
+            )
+        else:
+            message = text_data_json['message']
+            self.user_id = self.scope['user'].id
+            self.user_name = self.scope['user'].username
+            user_profile = await database_sync_to_async(Profile.objects.get)(user=self.scope['user'])
+
+            chat = Chat(
+                content=message,
+                user=self.scope['user'],
+                room=room,
+            )
+            await database_sync_to_async(chat.save)()
+            # Send message to room group
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                    'user_id': self.user_id,
+                    'user_name': self.user_name,
+                    'user_profile': user_profile.image.url,
+                }
+            )
 
     # Receive message from room group
     async def chat_message(self, event):

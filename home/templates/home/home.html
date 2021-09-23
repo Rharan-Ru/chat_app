@@ -15,38 +15,40 @@
 </style>
 
 
-<div class="container-fluid text-white mt-3 mb-3 cont" style="width:90%;">
+<div class="container-fluid text-white mt-3 mb-3 p-0 cont" style="width:90%;">
     <div class="row all-bar m-0 p-0">
-        <div class="col-md-8 m-0 p-2">
-            <div class="p-2 rounded mb-2 row m-0" style="background-color:#343a406e">
+        <div class="col-lg-8 m-0 p-0">
+            <div class="p-2 rounded mb-2 row m-0 border" style="background-color:#343a406e">
                 <a href="{% url 'home_tag' 'destaques' %}" class="text-white col-sm-4 p-2 m-0 bg-dark text-center salas_links rounded" style="text-decoration: none"><p class="m-0 p-0" style="font-size:16px;"><strong>Em Destaque</strong></p></a>
                 <a href="{% url 'home_tag' 'novos' %}" class="col-sm-4 p-2 m-0 text-center salas_links rounded" style="text-decoration: none"><p class="m-0 p-0" style="font-size:16px;"><strong>Novos Posts</strong></p></a>
                 <a href="{% url 'home_tag' 'mais_votados' %}" class="text-white col-sm-4 p-2 m-0 bg-dark text-center salas_links rounded" style="text-decoration: none"><p class="m-0 p-0" style="font-size:16px;"><strong>Mais Votados</strong></p></a>
             </div>
             {% for post in posts %}
             <a href="{% url 'post_detail' post.pk %}" class="p-0 m-0 text-white" style="text-decoration:none">
-                <div class="p-3 rounded" style="background-color:#343a406e">
+                <div class="p-3 rounded border" style="background-color:#343a406e">
                     <div>
                         <p><small>Created by: {{ post.author }} {{post.created_on}}</small></p>
                     </div>
                     <h4><strong>{{post.title}}</strong></h4>
-                    <p>{{post.body|truncatechars:200}}</p>
-                    <div class="embed-responsive embed-responsive-4by3">
-                        <img class="embed-responsive-item" src="{{post.thumb.url}}" alt="" style="object-fit:cover">
-                    </div>
+                    <p>{{post.body|truncatechars:290}}</p>
+                    {% if post.thumb %}
+                        <div class="embed-responsive embed-responsive-4by3">
+                            <img class="embed-responsive-item" src="{{post.thumb.url}}" alt="" style="object-fit:cover">
+                        </div>
+                    {% endif %}
                 </div>
             </a>
             {% endfor %}
         </div>
-        <div class="col-md-4 m-0 p-2 rounded" id="side-bar">
-            <p class="text-center p-3 m-0 mb-2 rounded" style="background-color:#343a406e"><strong>Top chat rooms</strong></p>
-            <div class="card" style="background-color:#343a406e">
+        <div class="col-lg-4 m-0  rounded" id="side-bar">
+            <p class="text-center p-3 m-0 mb-2 rounded border" style="background-color:#343a406e"><strong>Top chat rooms</strong></p>
+            <div class="card border" style="background-color:#343a406e">
                 <img class="card-img-top p-0 m-0" src="{% static 'steven_bg08.gif' %}" alt="Card image cap">
                 <div class="card-body row m-0 p-0">
                     {% for sala in salas %}
-                    <a class="col-12 row text-white m-0 p-0 salas_links" style="text-decoration:none" href="/chat/{{sala.name}}/">
-                        <div class="col-3 p-2 ml-2" style="font-size:13px">{{sala.users.count}} users</div>
-                        <div class="col-8 p-2"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover"> {{ sala.name }}</div>
+                    <a class="col-12 mt-2 p-1 mb-2 row text-white m-0 p-0 salas_links" style="text-decoration:none" href="/chat/{{sala.name}}/">
+                        <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover"> {{ sala.name }}</div>
+                        <div class="col-4 p-0"> {{sala.users.all.count }} members</div>
                     </a>
                     {% endfor %}
                 </div>

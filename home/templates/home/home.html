@@ -24,32 +24,46 @@
                 <a href="{% url 'home_tag' 'mais_votados' %}" class="text-white col-sm-4 p-2 m-0 bg-dark text-center salas_links rounded" style="text-decoration: none"><p class="m-0 p-0" style="font-size:16px;"><strong>Mais Votados</strong></p></a>
             </div>
             {% for post in posts %}
-            <a href="{% url 'post_detail' post.pk %}" class="p-0 m-0 text-white" style="text-decoration:none">
-                <div class="p-3 rounded border mt-3" style="background-color:#343a406e">
-                    <div>
-                        <p><small>Created by: {{ post.author }} {{post.created_on}}</small></p>
-                    </div>
+            <div class="p-2 rounded border mt-3" style="background-color:#343a406e">
+                <div>
+                    <p><small>Created by: {{ post.author }} {{post.created_on}}</small></p>
+                </div>
+                <a href="{% url 'post_detail' post.pk %}" class="p-0 m-0 text-white" style="text-decoration:none">
                     <h4><strong>{{post.title}}</strong></h4>
                     <p>{{post.body|truncatechars:290}}</p>
                     {% if post.thumb %}
-                        <div class="embed-responsive embed-responsive-4by3">
-                            <img class="embed-responsive-item" src="{{post.thumb.url}}" alt="" style="object-fit:cover">
-                        </div>
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <img class="embed-responsive-item" src="{{post.thumb.url}}" alt="" style="object-fit:cover">
+                    </div>
                     {% endif %}
+                </a>
+                <div class="row m-0 p-1 bg-warning rounded mt-1 text-body">
+                    <i class="bi bi-arrow-up-circle-fill m-0 p-0 ml-2 mr-2"></i>
+                    <i class="bi bi-arrow-down-circle-fill m-0 p-0 ml-2 mr-2"></i>
+                    <i class="bi bi-chat-left-dots-fill m-0 p-0 ml-2 mr-2"> <strong>{{ post.comments.all.count }} Comments</strong></i>
+                    <i class="bi bi-eye-fill m-0 p-0 ml-2 mr-2"> <strong>{{ post.views.all.count }}</strong></i>
                 </div>
-            </a>
+            </div>
             {% endfor %}
         </div>
+
         <div class="col-lg-4 m-0 rounded" id="side-bar">
             <p class="text-center p-3 m-0 mb-2 rounded border" style="background-color:#343a406e"><strong>Top chat rooms</strong></p>
             <div class="card border mt-3" style="background-color:#343a406e">
                 <img class="card-img-top p-0 m-0" src="{% static 'steven_bg08.gif' %}" alt="Card image cap">
                 <div class="card-body row m-0 p-0">
                     {% for sala in salas|slice:'0:10' %}
-                    <a class="col-12 mt-2 p-1 mb-2 row text-white m-0 p-0 salas_links" style="text-decoration:none" href="/chat/{{sala.name}}/">
-                        <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover"> {{ sala.name }}</div>
+                    {% if forloop.counter|divisibleby:"2" %}
+                    <a class="col-12 p-1 row text-white m-0 salas_links" style="text-decoration:none" href="/chat/{{sala.name}}/">
+                        <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover">{{ sala.name }}</div>
                         <div class="col-4 p-0"> {{sala.users.all.count }} members</div>
                     </a>
+                    {% else %}
+                    <a class="col-12 p-1 row text-body m-0 salas_links bg-warning" style="text-decoration:none" href="/chat/{{sala.name}}/">
+                        <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover">{{ sala.name }}</div>
+                        <div class="col-4 p-0"> {{sala.users.all.count }} members</div>
+                    </a>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>

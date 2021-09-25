@@ -3,7 +3,6 @@ const postPK = JSON.parse(document.getElementById('post-pk').textContent);
 var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
 var chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + "/ws/comments/" + postPK + '/');
 
-
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
 
@@ -82,9 +81,29 @@ $(document).submit(function(e) {
     e.target.children[0].value = '';
 });
 
-
 function removeComment(e) {
-    console.log(e);
-    console.log('removido');
-    $('#all-comment' + e).remove();
+    if (e.includes('reply')) {
+        e = e.slice(5, )
+        console.log(e)
+        $('.reply' + e).remove();
+        $('.modal-backdrop').remove();
+        $('.body').toggleClass('modal-open');
+        $('.body').css({'padding-right': '0'});
+        $('.modal').modal('hide');
+        chatSocket.send(JSON.stringify({
+            'remove': e,
+        }));
+    }
+
+    else {
+        $('#all-comment' + e).remove();
+        $('.modal-backdrop').remove();
+        $('.body').toggleClass('modal-open');
+        $('.body').css({'padding-right': '0'});
+        $('.modal').modal('hide');
+        chatSocket.send(JSON.stringify({
+            'remove': e,
+        }));
+    }
+
 }

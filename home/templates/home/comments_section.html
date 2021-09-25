@@ -21,7 +21,26 @@
                 <div class="col-11 m-0 p-0" id="accordion">
                     <a class="reply m-0 p-0" data-toggle="collapse" data-target="#collapseOne{{com.pk}}"><i class="bi bi-reply-fill"></i><small>Reply</small></a>
                     {% if request.user == com.author %}
-                    <a class="m-0 p-0 ml-2" id="{{com.pk}}" onclick="removeComment(this.id)"><i class="bi bi-x-circle-fill"></i><small>remove</small></a>
+                    <a class="m-0 p-0 ml-2" data-toggle="modal" data-target="#exampleModal{{com.pk}}"><i class="bi bi-x-circle-fill"></i><small>remove</small></a>
+                    <div class="modal fade" id="exampleModal{{com.pk}}" tabindex="-1" aria-labelledby="exampleModalLabel{{com.pk}}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content text-white bg-dark">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel{{com.pk}}">Remove Comment?</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Deseja remover esse comentário?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <a id="{{com.pk}}" onclick="removeComment(this.id)" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {% endif %}
                     <div class="p-0 m-0 collapse" aria-labelledby="headingOne" data-parent="#accordion" id="collapseOne{{com.pk}}">
                         <form action="" class="form-group m-0 p-0 row">
@@ -43,7 +62,7 @@
                 {% else %}
                 <div class="collapse collapseTwo{{com.pk}} texte{{com.pk}} show" id="collapseTwo{{com.pk}}" aria-labelledby="headingOne" data-parent="#accordion{{com.pk}}">
                 {% endif %}
-                    <div class="m-0 ml-3 p-0 row" id="replies">
+                    <div class="m-0 ml-3 p-0 row reply{{reply.pk}}" id="replies">
                         <div class="m-0 p-0 col-1 ">
                             <img class="mx-auto d-block mt-1 img-fluid rounded embed-responsive-item img-teste2" src="{{reply.author.profile.image.url}}" alt="" style="width:30px;height:30px;object-fit:cover">
                         </div>
@@ -54,6 +73,28 @@
                         <span class="col-1 m-0 p-0"></span>
                         <div class="col-11 m-0 p-0" id="accordion{{reply.pk}}">
                             <a class="reply m-0 p-0" data-toggle="collapse" data-target="#collapseOne{{reply.pk}}"><i class="bi bi-reply-fill"></i><small>Reply</small></a>
+                            {% if request.user == reply.author %}
+                            <a class="m-0 p-0 ml-2" data-toggle="modal" data-target="#exampleModal{{reply.pk}}"><i class="bi bi-x-circle-fill"></i><small>remove</small></a>
+                            <div class="modal fade" id="exampleModal{{reply.pk}}" tabindex="-1" aria-labelledby="exampleModalLabel{{reply.pk}}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content text-white bg-dark">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel{{reply.pk}}">Remove Comment?</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Deseja remover esse comentário?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <a id="reply{{reply.pk}}" onclick="removeComment(this.id)" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
                             <div class="p-0 m-0 collapse" aria-labelledby="headingOne" data-parent="#accordion" id="collapseOne{{reply.pk}}">
                                 <form action="" class="form-group m-0 p-0 row">
                                     <input type="text" class="chat-message-input-reply col-10 form-control mb-3 required-field {{reply.author}}" id="{{com.pk}}" maxlength="5000" placeholder="..." required>

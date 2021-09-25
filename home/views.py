@@ -21,6 +21,7 @@ class PostDetail(View):
     def get(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
         salas = ChatRoom.objects.all().annotate(num_users=Count('users')).order_by('-num_users')
+        post.views.add(request.user)
         context = {
             'post': post,
             'salas': salas,

@@ -57,6 +57,9 @@ class CommentsConsumer(AsyncWebsocketConsumer):
                     'num_comments': num_comments,
                 }
             )
+        elif 'remove' in text_data_json:
+            comment = await database_sync_to_async(Comment.objects.get)(pk=text_data_json['remove'])
+            await database_sync_to_async(comment.delete)()
         else:
             reply = text_data_json['reply']
             parent_id = text_data_json['parent_id']

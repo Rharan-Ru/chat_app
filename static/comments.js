@@ -3,6 +3,7 @@ const postPK = JSON.parse(document.getElementById('post-pk').textContent);
 var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
 var chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + "/ws/comments/" + postPK + '/');
 
+
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
 
@@ -80,3 +81,10 @@ $(document).submit(function(e) {
     }));
     e.target.children[0].value = '';
 });
+
+
+function removeComment(e) {
+    console.log(e);
+    console.log('removido');
+    $('#all-comment' + e).remove();
+}

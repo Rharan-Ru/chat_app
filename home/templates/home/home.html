@@ -25,7 +25,7 @@
             </div>
             {% for post in posts %}
             <a href="{% url 'post_detail' post.pk %}" class="p-0 m-0 text-white" style="text-decoration:none">
-                <div class="p-3 rounded border" style="background-color:#343a406e">
+                <div class="p-3 rounded border mt-3" style="background-color:#343a406e">
                     <div>
                         <p><small>Created by: {{ post.author }} {{post.created_on}}</small></p>
                     </div>
@@ -40,9 +40,9 @@
             </a>
             {% endfor %}
         </div>
-        <div class="col-lg-4 m-0  rounded" id="side-bar">
+        <div class="col-lg-4 m-0 rounded" id="side-bar">
             <p class="text-center p-3 m-0 mb-2 rounded border" style="background-color:#343a406e"><strong>Top chat rooms</strong></p>
-            <div class="card border" style="background-color:#343a406e">
+            <div class="card border mt-3" style="background-color:#343a406e">
                 <img class="card-img-top p-0 m-0" src="{% static 'steven_bg08.gif' %}" alt="Card image cap">
                 <div class="card-body row m-0 p-0">
                     {% for sala in salas|slice:'0:10' %}

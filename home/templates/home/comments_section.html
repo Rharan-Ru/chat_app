@@ -8,7 +8,7 @@
     <div class="container-fluid p-0 m-0" id="commentSection">
         {% for com in post.comments.all reversed %}
         {% if com.is_parent %}
-        <div class="m-0 p-0">
+        <div class="m-0 p-0" id="all-comment{{com.pk}}">
             <div class="m-0 p-0 row" id="comment{{com.pk}}">
                 <div class="m-0 p-0 col-1 ">
                     <img class="mx-auto d-block mt-1 img-fluid rounded embed-responsive-item img-teste" src="{{com.author.profile.image.url}}" alt="" style="width:50px;height:40px;object-fit:cover">
@@ -20,6 +20,9 @@
                 <span class="col-1 m-0 p-0"></span>
                 <div class="col-11 m-0 p-0" id="accordion">
                     <a class="reply m-0 p-0" data-toggle="collapse" data-target="#collapseOne{{com.pk}}"><i class="bi bi-reply-fill"></i><small>Reply</small></a>
+                    {% if request.user == com.author %}
+                    <a class="m-0 p-0 ml-2" id="{{com.pk}}" onclick="removeComment(this.id)"><i class="bi bi-x-circle-fill"></i><small>remove</small></a>
+                    {% endif %}
                     <div class="p-0 m-0 collapse" aria-labelledby="headingOne" data-parent="#accordion" id="collapseOne{{com.pk}}">
                         <form action="" class="form-group m-0 p-0 row">
                             <input type="text" class="chat-message-input-reply col-10 form-control mb-3 required-field {{com.author}}" id="{{com.pk}}" maxlength="5000" placeholder="..." required>

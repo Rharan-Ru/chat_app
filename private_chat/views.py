@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 
 
-class ListThreads(View):
+class ListThreads(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         threads = ThreadModel.objects.filter(Q(user=request.user) | Q(receiver=request.user))
         salas_user = ChatRoom.objects.filter(users=request.user)
@@ -19,7 +19,7 @@ class ListThreads(View):
         return render(request, 'private_chat/inbox.html', context)
 
 
-class CreateThread(View):
+class CreateThread(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
         profile = Profile.objects.get(pk=pk)
         receiver = profile.user

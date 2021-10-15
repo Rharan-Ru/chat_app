@@ -1,10 +1,17 @@
 {% block content %}
-<div class="p-1 rounded mt-2" style="background-color:#343a406e">
+<div class="col-lg-8 p-1 rounded mt-2" style="background-color:#343a406e">
+    {% if request.user.is_authenticated %}
     <div class="row p-0 m-0">
         <input type="text" class="col-10 form-control mb-3 required-field" style="border:none; background-color:black; color:white" id="chat-message-input" maxlength="5000" placeholder="..." required>
         <button class="col-2 btn btn-dark msg" style="height:10%" onclick="alterClass();" id="chat-message-submit" type="submit" value="Send"> > </button>
     </div>
-
+    {% else %}
+    <div class="row m-0 p-0 mb-2">
+        <p class="col-12 text-center">Login or Sign up to comment</p>
+        <a class="text-white col-6 p-1 bg-primary text-center" style="text-decoration:none" href="{% url 'account_login' %}">Login</a>
+        <a class="text-white col-6 p-1 bg-dark text-center" style="text-decoration:none" href="{% url 'account_signup' %}">SignUp</a>
+    </div>
+    {% endif %}
     <div class="container-fluid p-0 m-0" id="commentSection">
         {% for com in post.comments.all reversed %}
         {% if com.is_parent %}
@@ -19,7 +26,9 @@
                 </div>
                 <span class="col-1 m-0 p-0"></span>
                 <div class="col-11 m-0 p-0" id="accordion">
+                    {% if request.user.is_authenticated %}
                     <a class="reply m-0 p-0" data-toggle="collapse" data-target="#collapseOne{{com.pk}}"><i class="bi bi-reply-fill"></i><small>Reply</small></a>
+                    {% endif %}
                     {% if request.user == com.author %}
                     <a class="m-0 p-0 ml-2" data-toggle="modal" data-target="#exampleModal{{com.pk}}"><i class="bi bi-x-circle-fill"></i><small>remove</small></a>
                     <div class="modal fade" id="exampleModal{{com.pk}}" tabindex="-1" aria-labelledby="exampleModalLabel{{com.pk}}" aria-hidden="true">
@@ -72,7 +81,9 @@
                         </div>
                         <span class="col-1 m-0 p-0"></span>
                         <div class="col-11 m-0 p-0" id="accordion{{reply.pk}}">
+                            {% if request.user.is_authenticated %}
                             <a class="reply m-0 p-0" data-toggle="collapse" data-target="#collapseOne{{reply.pk}}"><i class="bi bi-reply-fill"></i><small>Reply</small></a>
+                            {% endif %}
                             {% if request.user == reply.author %}
                             <a class="m-0 p-0 ml-2" data-toggle="modal" data-target="#exampleModal{{reply.pk}}"><i class="bi bi-x-circle-fill"></i><small>remove</small></a>
                             <div class="modal fade" id="exampleModal{{reply.pk}}" tabindex="-1" aria-labelledby="exampleModalLabel{{reply.pk}}" aria-hidden="true">
@@ -111,4 +122,6 @@
         {% endfor %}
     </div>
 </div>
+</div>
+
 {% endblock content %}

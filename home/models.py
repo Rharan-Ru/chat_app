@@ -11,6 +11,7 @@ class Post(models.Model):
     created_on = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     views = models.ManyToManyField(User, related_name='views')
+    likes = models.ManyToManyField(User, related_name='likes')
 
     def __str__(self):
         return self.title

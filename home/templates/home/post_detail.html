@@ -12,9 +12,9 @@
     }
 </style>
 
-<div class="container-fluid text-white mt-3 mb-3 cont p-0" style="width:90%;">
+<div class="container-fluid text-white mt-3 mb-3 p-0 cont" style="width:90%;">
     <div class="row all-bar m-0 p-0">
-        <div class="col-lg-8 m-0 p-1">
+        <div class="col-lg-8 m-0 p-0">
             <div class="p-2 rounded border" style="background-color:#343a406e">
                 <h4><strong>{{post.title}}</strong></h4>
                 <p class=""><small>Created by: {{ post.author }} {{post.created_on}}</small></p>
@@ -23,23 +23,31 @@
                 </div>
                 <p class="mt-3 p-1" style="white-space:pre-line">{{post.body}}</p>
             </div>
-            <!-- Comments Section -->
-            {% include 'home/comments_section.html' %}
         </div>
-        <div class="col-lg-4 m-0 p-1 rounded" id="side-bar">
+
+        <div class="col-lg-4 m-0 rounded" id="side-bar">
             <p class="text-center p-3 m-0 mb-2 rounded border" style="background-color:#343a406e"><strong>Top chat rooms</strong></p>
-            <div class="card border" style="background-color:#343a406e">
+            <div class="card border mt-3" style="background-color:#343a406e">
                 <img class="card-img-top p-0 m-0" src="{% static 'steven_bg08.gif' %}" alt="Card image cap">
                 <div class="card-body row m-0 p-0">
                     {% for sala in salas|slice:'0:10' %}
-                    <a class="col-12 mt-2 p-1 mb-2 row text-white m-0 p-0 salas_links" style="text-decoration:none" href="/chat/{{sala.name}}/">
-                        <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover"> {{ sala.name }}</div>
+                    {% if forloop.counter|divisibleby:"2" %}
+                    <a class="col-12 p-1 row text-white m-0 salas_links" style="text-decoration:none" href="/chat/{{sala.name}}/">
+                        <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover">{{ sala.name }}</div>
                         <div class="col-4 p-0"> {{sala.users.all.count }} members</div>
                     </a>
+                    {% else %}
+                    <a class="col-12 p-1 row text-body m-0 salas_links bg-warning" style="text-decoration:none" href="/chat/{{sala.name}}/">
+                        <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover">{{ sala.name }}</div>
+                        <div class="col-4 p-0"> {{sala.users.all.count }} members</div>
+                    </a>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
         </div>
+        <!-- Comments Section -->
+        {% include 'home/comments_section.html' %}
     </div>
 </div>
 

@@ -1,5 +1,6 @@
-document.querySelector('#room-name-input').focus();
+console.log('teste')
 
+document.querySelector('#room-name-input').focus();
 document.querySelector('#room-name-input').onkeyup = function(e) {
     if (e.keyCode === 13) {  // enter, return
         document.querySelector('#room-name-submit').click();
@@ -13,6 +14,7 @@ document.querySelector('#room-name-submit').onclick = function(e) {
 
 var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
 var chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + "/ws/chat/");
+
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     $('#lista_salas').empty();

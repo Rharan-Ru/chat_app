@@ -38,8 +38,15 @@
                     {% endif %}
                 </a>
                 <div class="row m-0 p-1 bg-warning rounded mt-1 text-body">
-                    <i class="bi bi-arrow-up-circle-fill m-0 p-0 ml-2 mr-2"></i>
-                    <i class="bi bi-arrow-down-circle-fill m-0 p-0 ml-2 mr-2"></i>
+                    <form class="m-0 p-0 formulario-likes" id="form{{post.pk}}" action="{% url 'like_post' post.pk %}">
+                        {% csrf_token %}
+                        {% if request.user in post.likes.all %}
+                            <a class="border-none" type="submit" style="text-decoration: none;"><i class="bi bi-arrow-up-circle-fill m-0 p-0 ml-2 mr-2 text-danger" id="likes{{post.pk}}">{{post.likes.count}} votes</i></a>
+                        {% else %}
+                            <a class="border-none" type="submit" style="text-decoration: none;"><i class="bi bi-arrow-up-circle-fill m-0 p-0 ml-2 mr-2 text-info" id="likes{{post.pk}}">{{post.likes.count}} votes</i></a>
+                        {% endif %}
+                        <i class="bi bi-arrow-down-circle-fill m-0 p-0 ml-2 mr-2"></i>
+                    </form>
                     <i class="bi bi-chat-left-dots-fill m-0 p-0 ml-2 mr-2"> <strong>{{ post.comments.all.count }} Comments</strong></i>
                     <i class="bi bi-eye-fill m-0 p-0 ml-2 mr-2"> <strong>{{ post.views.all.count }}</strong></i>
                 </div>

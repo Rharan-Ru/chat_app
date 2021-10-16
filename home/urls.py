@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Home, HomeTag, PostDetail, RedirectURL, AddLikes
+from .views import Home, HomeTag, PostDetail, RedirectURL, AddLikes, AddDeslikes
 
 
 urlpatterns = [
@@ -8,5 +8,6 @@ urlpatterns = [
     path('post/<int:pk>', PostDetail.as_view(), name='post_detail'),
     path('login', RedirectURL.as_view(), name='login_universal'),
     path('likes/add/<int:pk>', AddLikes.as_view(), name='like_post'),
+    path('deslikes/add/<int:pk>', AddDeslikes.as_view(), name='deslike_post'),
 
 ]

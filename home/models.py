@@ -12,6 +12,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     views = models.ManyToManyField(User, related_name='views')
     likes = models.ManyToManyField(User, related_name='likes')
+    deslikes = models.ManyToManyField(User, related_name='deslikes')
 
     def __str__(self):
         return self.title

@@ -59,13 +59,38 @@ class AddLikes(View):
 
         if request.user in post.likes.all():
             post.likes.remove(request.user)
-            data['color'] = 'text-info'
+            data['color'] = 'text-dark'
 
         elif request.user not in post.likes.all():
             post.likes.add(request.user)
             data['color'] = 'text-danger'
+            if request.user in post.deslikes.all():
+                post.deslikes.remove(request.user)
+                data['color_c'] = 'text-dark'
 
         data['likes'] = post.likes.all().count()
 
+        post.save()
+        return JsonResponse(data)
+
+
+class AddDeslikes(View):
+    def post(self, request, pk, *args, **kwargs):
+        post = Post.objects.get(pk=pk)
+        likes = post.likes.all().count()
+        data = {}
+
+        if request.user in post.deslikes.all():
+            post.deslikes.remove(request.user)
+            data['color'] = 'text-dark'
+
+        elif request.user not in post.deslikes.all():
+            post.deslikes.add(request.user)
+            data['color'] = 'text-danger'
+            if request.user in post.deslikes.all():
+                post.likes.remove(request.user)
+                data['color_c'] = 'text-dark'
+
+        data['likes'] = post.likes.all().count()
         post.save()
         return JsonResponse(data)

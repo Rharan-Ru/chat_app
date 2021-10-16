@@ -38,14 +38,21 @@
                     {% endif %}
                 </a>
                 <div class="row m-0 p-1 bg-warning rounded mt-1 text-body">
-                    <form class="m-0 p-0 formulario-likes" id="form{{post.pk}}" action="{% url 'like_post' post.pk %}">
+                    <form class="m-0 p-0 formulario-likes" id="form_like{{post.pk}}" action="{% url 'like_post' post.pk %}">
                         {% csrf_token %}
                         {% if request.user in post.likes.all %}
-                            <a class="border-none" type="submit" style="text-decoration: none;"><i class="bi bi-arrow-up-circle-fill m-0 p-0 ml-2 mr-2 text-danger" id="likes{{post.pk}}">{{post.likes.count}} votes</i></a>
+                        <a class="border-none" type="submit" style="text-decoration: none;"><i class="bi bi-arrow-up-circle-fill m-0 p-0 ml-2 mr-2 text-danger" id="likes{{post.pk}}">{{post.likes.count}} votes</i></a>
                         {% else %}
-                            <a class="border-none" type="submit" style="text-decoration: none;"><i class="bi bi-arrow-up-circle-fill m-0 p-0 ml-2 mr-2 text-info" id="likes{{post.pk}}">{{post.likes.count}} votes</i></a>
+                        <a class="border-none" type="submit" style="text-decoration: none;"><i class="bi bi-arrow-up-circle-fill m-0 p-0 ml-2 mr-2 text-dark" id="likes{{post.pk}}">{{post.likes.count}} votes</i></a>
                         {% endif %}
-                        <i class="bi bi-arrow-down-circle-fill m-0 p-0 ml-2 mr-2"></i>
+                    </form>
+                    <form class="m-0 p-0 formulario-deslikes" id="form_deslike{{post.pk}}" action="{% url 'deslike_post' post.pk %}">
+                        {% csrf_token %}
+                        {% if request.user in post.deslikes.all %}
+                        <a class="border-none" type="submit" style="text-decoration: none;"><i class="bi bi-arrow-down-circle-fill m-0 p-0 ml-2 mr-2 text-danger" id="deslikes{{post.pk}}"></i></a>
+                        {% else %}
+                        <a class="border-none" type="submit" style="text-decoration: none;"><i class="bi bi-arrow-down-circle-fill m-0 p-0 ml-2 mr-2 text-dark" id="deslikes{{post.pk}}"></i></a>
+                        {% endif %}
                     </form>
                     <i class="bi bi-chat-left-dots-fill m-0 p-0 ml-2 mr-2"> <strong>{{ post.comments.all.count }} Comments</strong></i>
                     <i class="bi bi-eye-fill m-0 p-0 ml-2 mr-2"> <strong>{{ post.views.all.count }}</strong></i>
@@ -77,7 +84,6 @@
         </div>
     </div>
 </div>
-
 
 <script src="{% static 'sidebar.js' %}"></script>
 

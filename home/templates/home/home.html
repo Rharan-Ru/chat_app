@@ -3,21 +3,29 @@
 {% block content %}
 
 
-<style>
-    body {
-        background-color: black
-    }
-
-    .salas_links:hover{
-        opacity:70%;
-        background-color: black
-    }
-</style>
-
-
 <div class="container-fluid text-white mt-3 mb-3 p-0 cont" style="width:90%;">
+    <div class="row m-0 p-0">
+        {% for post in posts|slice:'0:4' %}
+        <div class="col-lg-3 m-0 p-1">
+            <a href="{% url 'post_detail' post.pk %}" class="p-0 m-0 text-white" style="text-decoration:none">
+                <div class="card embed-responsive" id="last_posts">
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <img src="{{post.thumb.url}}" alt="" class="card-img embed-responsive-item" style="object-fit:cover">
+                    </div>
+                    <div class="card-img-overlay p-0" style="justify-content: start;align-items: end; display: flex">
+                        <div class="m-0 p-2 text-center">
+                            <h5 class="card-title">{{post.title}}</h5>
+                            <p class="card-text text-left"><small>~{{post.author}}</small></p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
     <div class="row all-bar m-0 p-0">
-        <div class="col-lg-8 m-0 p-0">
+        <div class="col-lg-8 m-0 p-1">
             <div class="p-2 rounded mb-2 row m-0 border" style="background-color:#343a406e">
                 <a href="{% url 'home_tag' 'destaques' %}" class="text-white col-sm-4 p-2 m-0 bg-dark text-center salas_links rounded" style="text-decoration: none"><p class="m-0 p-0" style="font-size:16px;"><strong>Em Destaque</strong></p></a>
                 <a href="{% url 'home_tag' 'novos' %}" class="col-sm-4 p-2 m-0 text-center salas_links rounded" style="text-decoration: none"><p class="m-0 p-0" style="font-size:16px;"><strong>Novos Posts</strong></p></a>
@@ -61,24 +69,26 @@
             {% endfor %}
         </div>
 
-        <div class="col-lg-4 m-0 rounded" id="side-bar">
-            <p class="text-center p-3 m-0 mb-2 rounded border" style="background-color:#343a406e"><strong>Top chat rooms</strong></p>
-            <div class="card border mt-3" style="background-color:#343a406e">
-                <img class="card-img-top p-0 m-0" src="{% static 'steven_bg08.gif' %}" alt="Card image cap">
-                <div class="card-body row m-0 p-0">
-                    {% for sala in salas|slice:'0:10' %}
-                    {% if forloop.counter|divisibleby:"2" %}
-                    <a class="col-12 p-1 row text-white m-0 salas_links" style="text-decoration:none" href="/chat/{{sala.name}}/">
-                        <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover">{{ sala.name }}</div>
-                        <div class="col-4 p-0"> {{sala.users.all.count }} members</div>
-                    </a>
-                    {% else %}
-                    <a class="col-12 p-1 row text-body m-0 salas_links bg-warning" style="text-decoration:none" href="/chat/{{sala.name}}/">
-                        <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover">{{ sala.name }}</div>
-                        <div class="col-4 p-0"> {{sala.users.all.count }} members</div>
-                    </a>
-                    {% endif %}
-                    {% endfor %}
+        <div class="col-lg-4 m-0 p-1 rounded" id="side-bar" style="">
+            <div class="sticky-top m-0 p-0">
+                <p class="text-center p-3 m-0 mb-2 rounded border" style="background-color:#343a406e"><strong>Top chat rooms</strong></p>
+                <div class="card border mt-3" style="background-color:#343a406e">
+                    <img class="card-img-top p-0 m-0" src="{% static 'steven_bg08.gif' %}" alt="Card image cap">
+                    <div class="card-body row m-0 p-0">
+                        {% for sala in salas|slice:'0:10' %}
+                        {% if forloop.counter|divisibleby:"2" %}
+                        <a class="col-12 p-1 row text-white m-0 salas_links" style="text-decoration:none" href="/chat/{{sala.name}}/">
+                            <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover">{{ sala.name }}</div>
+                            <div class="col-4 p-0"> {{sala.users.all.count }} members</div>
+                        </a>
+                        {% else %}
+                        <a class="col-12 p-1 row text-body m-0 salas_links bg-warning" style="text-decoration:none" href="/chat/{{sala.name}}/">
+                            <div class="col-8 p-0"><img src="{{ sala.image.url }}" class="img-fluid rounded-circle mr-1" style="width:30px;height:30px;object-fit:cover">{{ sala.name }}</div>
+                            <div class="col-4 p-0"> {{sala.users.all.count }} members</div>
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

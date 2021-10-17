@@ -4,16 +4,15 @@ from home.models import Post, Comment
 from chat.models import ChatRoom
 from django.db.models import Count
 from django.http import HttpResponseRedirect, JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class Home(View):
     def get(self, request, *args, **kwargs):
         posts = Post.objects.all().order_by('created_on')
-        salas = ChatRoom.objects.all().annotate(num_users=Count('users')).order_by('-num_users')
 
         context = {
             'posts': posts,
-            'salas': salas,
         }
         return render(request, 'home/home.html', context)
 
@@ -21,28 +20,30 @@ class Home(View):
 class PostDetail(View):
     def get(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
-        salas = ChatRoom.objects.all().annotate(num_users=Count('users')).order_by('-num_users')
         if request.user.is_authenticated:
             post.views.add(request.user)
         context = {
             'post': post,
-            'salas': salas,
         }
         return render(request, 'home/post_detail.html', context)
 
 
 class HomeTag(View):
     def get(self, request, tag, *args, **kwargs):
-        posts = Post.objects.all().order_by('-created_on')
         if tag == 'destaques':
             posts = Post.objects.all().order_by('-views')
-        salas = ChatRoom.objects.all().annotate(num_users=Count('users')).order_by('-num_users')
-
-        context = {
-            'posts': posts,
-            'salas': salas,
-        }
-        return render(request, 'home/home.html', context)
+            context = {'posts': posts}
+            return render(request, 'home/home.html', context)
+        elif tag == 'mais_votados':
+            num_posts = Post.objects.all().count()
+            posts = Post.objects.all().order_by('-likes')[0:num_posts]
+            context = {'posts': posts}
+            return render(request, 'home/home.html', context)
+        elif tag == 'novos':
+            posts = Post.objects.all().order_by('-created_on')
+            context = {'posts': posts}
+            return render(request, 'home/home.html', context)
+        return render(request, 'home/home.html')
 
 
 class RedirectURL(View):
@@ -51,7 +52,7 @@ class RedirectURL(View):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-class AddLikes(View):
+class AddLikes(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
         likes = post.likes.all().count()
@@ -74,7 +75,7 @@ class AddLikes(View):
         return JsonResponse(data)
 
 
-class AddDeslikes(View):
+class AddDeslikes(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
         likes = post.likes.all().count()
@@ -91,6 +92,6 @@ class AddDeslikes(View):
                 post.likes.remove(request.user)
                 data['color_c'] = 'text-dark'
 
-        data['likes'] = post.likes.all().count()
+        data['likes'] = likes
         post.save()
         return JsonResponse(data)

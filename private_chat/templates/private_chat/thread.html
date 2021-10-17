@@ -112,39 +112,47 @@
 
     <div class="col-lg-3 mt-2 m-0" id="side-bar2">
         <div class="p-0 m-0 card bg-dark" style="height:70vh; overflow-y: auto;background-image: url({% static 'default.jpg' %});background-size:cover;background-position:center;scroll-behavior: smooth">
+            <p class="text-center bg-dark p-2 text-white mt-3"><strong>Meus chats</strong></p>
             {% for th in threads.all %}
             {% if thread != th %}
-            <div class="bg-warning row p-0 m-0 mt-1 rounded">
-                {% if th.receiver == request.user %}
-                <div class="col-2 p-1 m-0">
-                    <img class="rounded" src="{{th.user.profile.image.url}}" style="width:40px;height:40px;object-fit:cover" alt="">
-                </div>
-                {% else %}
-                <div class="col-2 p-1 m-0">
-                    <img class="rounded" src="{{th.receiver.profile.image.url}}" style="width:40px;height:40px;object-fit:cover" alt="">
-                </div>
-                {% endif %}
+            <a href="{% url 'thread' th.pk %}" class="m-0 p-0 text-dark" style="text-decoration: none;">
+                <div class="bg-warning row p-0 m-0 mt-1 rounded">
+                    {% if th.receiver == request.user %}
+                    <div class="col-2 p-1 m-0">
+                        <img class="rounded" src="{{th.user.profile.image.url}}" style="width:40px;height:40px;object-fit:cover" alt="">
+                    </div>
+                    {% else %}
+                    <div class="col-2 p-1 m-0">
+                        <img class="rounded" src="{{th.receiver.profile.image.url}}" style="width:40px;height:40px;object-fit:cover" alt="">
+                    </div>
+                    {% endif %}
 
-                {% if th.receiver == request.user %}
-                <div class="col-8 row">
-                    <p class="card-text m-0 p-0"><strong>{{th.user}}</strong></p>
-                    {% for msg in mess %}
-                    {% if msg.thread == th %}
-                    <p class="text-body m-0 p-0">{{ msg.text|truncatechars:20 }}</p>
+                    {% if th.receiver == request.user %}
+                    <div class="col-8 row">
+                        <p class="card-text m-0 p-0"><strong>{{th.user}}</strong></p>
+                        {% for msg in mess.all %}
+                        {% if msg.thread|slice:'0:1' == th %}
+                        <p class="text-body m-0 p-0">{{ msg.text|truncatechars:20 }}</p>
+                        {{ "<!--" }}
+                        {% endif %}
+                        {% endfor %}
+                        {{ "-->" }}
+                    </div>
+                    {% else %}
+                    <div class="col-8 row">
+                        <p class="card-text m-0 p-0"><strong>{{th.receiver}}</strong></p>
+                        {% for msg in mess.all %}
+                        {% if msg.thread|slice:'0:1' == th %}
+
+                        <p class="text-body m-0 p-0">{{ msg.text|truncatechars:20 }}</p>
+                        {{ "<!--" }}
+                        {% endif %}
+                        {% endfor %}
+                        {{ "-->" }}
+                    </div>
                     {% endif %}
-                    {% endfor %}
                 </div>
-                {% else %}
-                <div class="col-8 row">
-                    <p class="card-text m-0 p-0"><strong>{{th.receiver}}</strong></p>
-                    {% for msg in mess %}
-                    {% if msg.thread == th %}
-                    <p class="text-body m-0 p-0">{{ msg.text|truncatechars:20 }}</p>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
+            </a>
             {% endif %}
             {% endfor %}
             <p class="text-center bg-dark p-2 text-white mt-3"><strong>Minhas salas</strong></p>

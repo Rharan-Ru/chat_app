@@ -55,7 +55,6 @@ class RedirectURL(View):
 class AddLikes(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
-        likes = post.likes.all().count()
         data = {}
 
         if request.user in post.likes.all():
@@ -68,7 +67,6 @@ class AddLikes(LoginRequiredMixin, View):
             if request.user in post.deslikes.all():
                 post.deslikes.remove(request.user)
                 data['color_c'] = 'text-dark'
-
         data['likes'] = post.likes.all().count()
 
         post.save()
@@ -78,7 +76,6 @@ class AddLikes(LoginRequiredMixin, View):
 class AddDeslikes(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
-        likes = post.likes.all().count()
         data = {}
 
         if request.user in post.deslikes.all():
@@ -92,6 +89,6 @@ class AddDeslikes(LoginRequiredMixin, View):
                 post.likes.remove(request.user)
                 data['color_c'] = 'text-dark'
 
-        data['likes'] = likes
+        data['likes'] = post.likes.all().count()
         post.save()
         return JsonResponse(data)

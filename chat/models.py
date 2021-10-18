@@ -30,8 +30,14 @@ class Chat(models.Model):
     room = models.ForeignKey('ChatRoom', on_delete=models.CASCADE)
 
 
+# Organize chats categories
+class Categorias(models.Model):
+    categoria = models.CharField(max_length=255, blank=True)
+
+
 # Class to create a chatroom
 class ChatRoom(models.Model):
     name = models.CharField(max_length=255)
     users = models.ManyToManyField(User)
     image = models.ImageField(upload_to='img_room/', default="img_room/default.jpg", blank=True)
+    categ = models.ManyToManyField(Categorias, default='Geral')

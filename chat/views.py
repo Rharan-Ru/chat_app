@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from .models import ChatRoom, Chat
+from .models import ChatRoom, Chat, Categorias
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.db.models import Q
@@ -10,7 +10,10 @@ from django.db.models import Q
 class Index(LoginRequiredMixin, View):
     def get(self, request):
         chats = ChatRoom.objects.all()
-        return render(request, 'chat/index.html', {'chats': chats})
+        meus_chats = ChatRoom.objects.filter(users=request.user.pk)
+        categorias = Categorias.objects.all()
+        print(meus_chats)
+        return render(request, 'chat/index.html', {'chats': chats, 'meus_chats': meus_chats, 'categorias': categorias})
 
 
 # Create a chatroom if is not created and get all chat messages inside it

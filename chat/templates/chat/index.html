@@ -12,18 +12,65 @@ body {
 }
 </style>
 
-
+{{request.user}}
 <div class="text-white container-fluid text-center mx-auto form-group p-3">
     <h4>What chat room would you like to enter?</h4>
     <input class="form-control" id="room-name-input" type="text" size="100" placeholder="Enter a ChatRoom name"><br>
     <button class=" btn-dark btn-lg btn-block" id="room-name-submit" type="button">Enter</button>
 </div>
 
-<div class="container-fluid">
-    <div class="row" id="lista_salas">
-
+<section class="container-fluid text-white mt-3 mb-3 p-0 " style="width:90%;">
+    <div class="row m-0 p-0" >
+        <div class="col-md-3 m-0 p-1">
+            <div class="m-0 p-0 border" style="background-color:#343a406e">
+                <div class="text-center bg-dark p-2"><h5>Categorias</h5></div>
+                {% for cate in categorias %}
+                <div class="text-white border-top p-1">
+                    <div class="m-0 p-0 row">
+                        <p class="ml-2" style="justify-content: start;align-items: end; display: flex"><strong>{{cate.categoria}}</strong></p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-5 m-0 p-1">
+            <div class="m-0 p-0 border" style="background-color:#343a406e">
+                <div class="text-center bg-dark p-2"><h5>Melhores salas</h5></div>
+                {% for chat in chats %}
+                <a class="text-white m-0 p-0" href="{% url 'room' chat.name %}" style="text-decoration: none">
+                    <div class="text-white border-top p-1">
+                        <div class="row m-0 p-0">
+                            <img src="{{chat.image.url}}" alt="" class="img-fluid rounded-circle " style="object-fit:cover;height:50px;width:50px;">
+                            <p class="ml-2" style="justify-content: start;align-items: end; display: flex"><strong>{{chat.name}} - 0{{chat.users.count}} members</strong></p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4 m-0 p-1">
+            <div class="m-0 p-0 border" style="background-color:#343a406e">
+                <div class="text-center bg-dark p-2"><h5>Minhas salas</h5></div>
+                {% for chat in meus_chats %}
+                <a class="text-white m-0 p-0" href="{% url 'room' chat.name %}" style="text-decoration: none">
+                    <div class="text-white border-top p-1">
+                        <div class="row m-0 p-0">
+                            <img src="{{chat.image.url}}" alt="" class="img-fluid rounded-circle " style="object-fit:cover;height:50px;width:50px;">
+                            <p class="ml-2" style="justify-content: start;align-items: end; display: flex"><strong>{{chat.name}}</strong></p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-</div>
+</section>
+
+<!--<div class="container-fluid">-->
+<!--    <div class="row" id="lista_salas">-->
+
+<!--    </div>-->
+<!--</div>-->
 
 <script src="{% static 'index.js' %}">
 </script>

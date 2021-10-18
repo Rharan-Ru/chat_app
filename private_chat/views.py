@@ -1,5 +1,5 @@
 from django.views import View
-from .models import ThreadModel, MessageModel
+from .models import ThreadModel, MessageModel, SolicitaModel
 from chat.models import ChatRoom
 from chat.models import Profile
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -11,10 +11,13 @@ class ListThreads(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         threads = ThreadModel.objects.filter(Q(user=request.user) | Q(receiver=request.user))
         salas_user = ChatRoom.objects.filter(users=request.user)
+        mess = MessageModel.objects.all().order_by('-date')
 
         context = {
             'threads': threads,
-            'salas_user': salas_user
+            'salas_user': salas_user,
+            'mess': mess,
+
         }
         return render(request, 'private_chat/inbox.html', context)
 
@@ -23,6 +26,9 @@ class CreateThread(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
         profile = Profile.objects.get(pk=pk)
         receiver = profile.user
+
+        solicitacao = SolicitaModel.objects.filter(remetente=receiver, destinatario=request.user)
+        solicitacao.delete()
 
         if ThreadModel.objects.filter(user=request.user, receiver=receiver).exists():
             thread = ThreadModel.objects.filter(user=request.user, receiver=receiver)[0]
@@ -35,6 +41,7 @@ class CreateThread(LoginRequiredMixin, View):
             user=request.user,
             receiver=receiver
         )
+        print(thread)
         thread.save()
 
         return redirect('thread', pk=thread.pk)

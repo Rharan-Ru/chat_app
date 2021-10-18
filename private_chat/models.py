@@ -16,3 +16,8 @@ class MessageModel(models.Model):
     receiver_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     text = models.CharField(max_length=1000)
     date = models.DateTimeField(default=timezone.now)
+
+
+class SolicitaModel(models.Model):
+    remetente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='remetente')
+    destinatario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='destinatario')

@@ -1,0 +1,82 @@
+{% extends 'navbar.html' %}
+{% load custom_tags %}
+{% load static %}
+{% block content %}
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Lato:400,400i,700");
+
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+.details {
+  min-height: 40vh;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.profile {
+    background: #009FFF;
+    background: linear-gradient(to right, #ec2F4B, #009FFF);
+}
+</style>
+
+<section class="profile container-fluid p-0 m-0">
+    <div class="header m-0 p-0">
+        <div class="details emded-responsive m-0 p-0">
+            <img src="{{profile.image.url}}" alt="John Doe" style="height:20vh;width:20vh;object-fit:cover" class="rounded-circle img-fluid emded-responsive-item">
+            <h1 class="heading">{{profile.user}}</h1>
+            <div>
+                {% if contato == False %}
+                    {% if solicitado %}
+                        <p class="p-2 bg-dark">You alrealy send a contact</p>
+                    {% elif request.user != profile.user and fazer_contato == False %}
+                        <a class="btn btn-primary" href="{% url 'solicita' profile.pk %}">Contact</a>
+                    {% endif %}
+                    {% if fazer_contato %}
+                        <form action="{% url 'create_thread' profile.pk %}" class="m-0 p-0" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success p-1" style="height:5vh">Accept contact</button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <a class="p-1 btn btn-dark" href="{% url 'thread' thread.pk %}" style="text-decoration:none">Message</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row text-center text-white m-0 p-0">
+            <div class="col-4">
+                <h4>{{posts.count}}</h4>
+                <p>Posts</p>
+            </div>
+            <div class="col-4">
+                <h4>10</h4>
+                <p>Communities</p>
+            </div>
+            <div class="col-4">
+                <h4>100</h4>
+                <p>Discussions</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="container-fluid m-0 p-0 posts row">
+    {% for post in posts %}
+    <div class="p-2 rounded border mt-3 col-6" style="background-color:#343a406e">
+        <a href="{% url 'post_detail' post.pk %}" class="p-0 m-0 text-white" style="text-decoration:none">
+            <h4><strong>{{post.title}}</strong></h4>
+            <p>{{post.body|truncatechars:100}}</p>
+            {% if post.thumb %}
+            <div class="embed-responsive embed-responsive-4by3">
+                <img class="embed-responsive-item" src="{{post.thumb.url}}" alt="" style="object-fit:cover">
+            </div>
+            {% endif %}
+        </a>
+    </div>
+    {% endfor %}
+</section>
+{% endblock content %}

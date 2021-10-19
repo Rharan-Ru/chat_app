@@ -7,6 +7,19 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 
 
+class Solicita(View):
+    def get(self, request, pk, *args, **kwargs):
+        destinatario = Profile.objects.get(pk=pk)
+        if not SolicitaModel.objects.filter(remetente=request.user, destinatario=destinatario.user).exists():
+            solicitacao = SolicitaModel(
+                remetente=request.user,
+                destinatario=destinatario.user
+            )
+            solicitacao.save()
+
+        return redirect('profile', pk=pk)
+
+
 class ListThreads(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         threads = ThreadModel.objects.filter(Q(user=request.user) | Q(receiver=request.user))
@@ -20,6 +33,17 @@ class ListThreads(LoginRequiredMixin, View):
 
         }
         return render(request, 'private_chat/inbox.html', context)
+
+
+class RemoveSolicita(View):
+    def post(self, request, pk, *args, **kwargs):
+        profile = Profile.objects.get(pk=pk)
+        receiver = profile.user
+
+        solicitacao = SolicitaModel.objects.filter(remetente=receiver, destinatario=request.user)
+        solicitacao.delete()
+
+        return redirect('inbox')
 
 
 class CreateThread(LoginRequiredMixin, View):

@@ -10,6 +10,7 @@
         background-color: black;
     }
 </style>
+
 <div class="container-fluid text-white mt-3 mb-3 p-0 " style="width:90%;">
     <div class="row mb-3">
         <div class="col-md-5 m-0 p-1">
@@ -29,6 +30,7 @@
                             </div>
                             <div class="card-body p-0 m-0 ml-1 text-white">
                                 {% if th.receiver == request.user %}
+                                    <p class="card-text m-0 p-0"><strong>{{th.user}}</strong></p>
                                     {% with "false" as data %}
                                         {% for msg in mess.all %}
                                             {% if data == "false" %}
@@ -91,7 +93,21 @@
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-success p-1 ml-1 mr-1" style="height:5vh">accept</button>
                             </form>
-                            <a href="" class="btn btn-danger p-1 ml-1 mr-1" style="height:5vh">decline</a>
+                            <form action="{% url 'remove_solicita' x.remetente.profile.pk %}" class="m-0 p-0" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger p-1 ml-1 mr-1" style="height:5vh">decline</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="m-0 p-0 border mt-2" style="background-color:#343a406e">
+                <div class="text-center bg-dark p-2"><h5>Solicitados</h5></div>
+                {% for x in request.user.remetente.all %}
+                    <div class="text-white border-top p-1">
+                        <div class="row m-0 p-0">
+                            <img src="{{x.remetente.profile.image.url}}" alt="" class="img-fluid rounded-circle " style="object-fit:cover;height:50px;width:50px;">
+                            <p class="ml-2" style="justify-content: start;align-items: end; display: flex"><strong>{{x.destinatario}}</strong></p>
                         </div>
                     </div>
                 {% endfor %}

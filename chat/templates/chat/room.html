@@ -83,12 +83,14 @@
         <h5 class="bg-dark text-white text-center p-0 m-0">all users <a class="btn btn-danger" type="submit" href="{% url 'index' %}" onclick="sair()">sair</a></h5>
         <div class="p-0 m-0 card bg-dark" id="lista_users2" style="height:70vh; overflow-y: auto;background-image: url({% static 'default.jpg' %});background-size:cover;background-position:center;scroll-behavior: smooth">
             {% for user in room.users.all %}
-            <div class="bg-warning row p-0 m-0 mt-1 rounded">
-                <div class="col-1 p-1 m-0">
-                    <img class="rounded" src="{{user.profile.image.url}}" style="width:30px;height:30px;object-fit:cover" alt="">
+            <a class="m-0 p-0" href="{% url 'profile' user.pk %}" style="text-decoration:none">
+                <div class="bg-warning row p-0 m-0 mt-1 rounded">
+                    <div class="col-1 p-1 m-0">
+                        <img class="rounded" src="{{user.profile.image.url}}" style="width:30px;height:30px;object-fit:cover" alt="">
+                    </div>
+                    <p class="col-8 text-white p-1 ms-2 m-0 text-body"><strong>{{ user }}</strong></p>
                 </div>
-                <p class="col-8 text-white p-1 ms-2 m-0 text-body"><strong>{{ user }}</strong></p>
-            </div>
+            </a>
             {% endfor %}
         </div>
         <p class="text-center text-uppercase m-0 p-1 text-white"><strong id="num_users">{{room.name}} - {{room.users.all.count}} members</strong></p>

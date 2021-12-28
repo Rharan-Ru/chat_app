@@ -127,6 +127,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     # Receive message from room group
     async def chat_message(self, event):
+        print(event)
         if event['message']:
             message = event['message']
             user_id = event['user_id']

@@ -1,4 +1,4 @@
-# Django Channels Real Time Chat Application
+# Django Channels Real Time Chat Application☼
 
 ## About Project
 

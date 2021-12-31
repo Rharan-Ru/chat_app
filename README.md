@@ -47,4 +47,6 @@ python3 manage.py runserver
 
 #### Obrigado por estar aqui, eu nunca vou parar, vou ficar um pouco melhor a cada dia trazendo cada vez mais projeto interessantes
 
-<img align="right" src="https://jonchaisson.files.wordpress.com/2021/10/anime-writing.gif" height="150" width="300" />
+<p align="center">
+  <img src="https://jonchaisson.files.wordpress.com/2021/10/anime-writing.gif" width=70% />
+</p>

@@ -8,9 +8,24 @@
 
 ### How Start The Project?
 
-First of all clone this repository
-
-``git clone``
+Primeiro de tudo vamos clonar este repositório
+````
+git clone https://github.com/Monke001/chat_app.git
+cd chat_app
+````
+Agora instalamos as dependencias dentro do requimeremts.txt, mas primeiro ativamos nossa venv
+````
+python3 -m venv venv
+cd venv/Scripts/activate
+pip install -r requirements.txt
+````
+Então rodamos o projeto, recomendo trocar o superuser do projeto para ter acesso a page admin e também rodar os comandos makemigrations e migrate
+````
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py createsuperuser
+python3 manage.py runserver
+````
 
 ### Features
 
@@ -28,3 +43,8 @@ First of all clone this repository
 <p>
   Apesar de ser um projeto de estudo eu penso em deixar ele melhor adicionando mais features como um sistema de notificações, area administrativa das salas de chat para o criador adicionar admin a outros usuários, bloquear usuários, até mesmo criar salas privadas a serem acessadas com código gerado automaticamente ou que permitam apenas adicionar amigos, há muitas features interessantes que podem e talvez serão adicionadas no futuro, até porque o projeto cumpre a função de estudo inicial sobre Django Channels, mas é muito divertido adicionar essas features então até breve provavelmente.
 </p>
+<hr />
+
+#### Obrigado por estar aqui, eu nunca vou parar, vou ficar um pouco melhor a cada dia trazendo cada vez mais projeto interessantes
+
+<img align="right" src="https://jonchaisson.files.wordpress.com/2021/10/anime-writing.gif" height="150" width="300" />

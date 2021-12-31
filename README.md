@@ -43,6 +43,19 @@ python3 manage.py runserver
 <p>
   Apesar de ser um projeto de estudo eu penso em deixar ele melhor adicionando mais features como um sistema de notificações, area administrativa das salas de chat para o criador adicionar admin a outros usuários, bloquear usuários, até mesmo criar salas privadas a serem acessadas com código gerado automaticamente ou que permitam apenas adicionar amigos, há muitas features interessantes que podem e talvez serão adicionadas no futuro, até porque o projeto cumpre a função de estudo inicial sobre Django Channels, mas é muito divertido adicionar essas features então até breve provavelmente.
 </p>
+
+### This project was deployed!
+
+<p>
+  Eu realizei o deploy desse projeto no Heroku, ele não foi muito intuitivo de fazer quanto fazer um deploy normal sem usar Django Channels, mas consegui fazendo algumas pesquisas rápidas no google, você pode conferir o live project neste link <bold><a href="https://monke-chatapp.herokuapp.com/" target="_blank">Chat App</a></bold>. E usar uma lista de usuários padrão:
+</p>
+
+- usuário:user01, senha: teste1010
+- usuário:user02, senha: teste1010
+- usuário:user03, senha: teste1010
+- usuário:user04, senha: teste1010
+- usuário:user05, senha: teste1010
+
 <hr />
 
 #### Obrigado por estar aqui, eu nunca vou parar, vou ficar um pouco melhor a cada dia trazendo cada vez mais projeto interessantes

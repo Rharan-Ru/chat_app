@@ -10,6 +10,20 @@ from chat.models import Profile
 
 
 class PrivateChatConsumer(AsyncWebsocketConsumer):
+    """
+    This consumer has all private messages logic
+
+    def connect - Just connect the user to the channel layer room, and save room_pk information.
+
+    def disconnect - This only discard the users from channel layer, in other words he is disconnected.
+
+    def receive - This method receive messages from web-socket and send to the room group, if user send a message
+    the receive update the database with this new message.
+    Also save the users messages and send back to the channel layer room group.
+
+    def chat_message - Send back all channel layer room group messages to the frontend with all nescessary
+    message informations.
+    """
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_pk']
         self.room_group_name = 'chat_%s' % self.room_name
@@ -46,6 +60,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
                                 receiver_user=user_receiver, text=message)
 
         await database_sync_to_async(messages.save)()
+
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,

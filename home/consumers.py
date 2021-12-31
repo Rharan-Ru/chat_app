@@ -10,6 +10,20 @@ from chat.models import Profile
 
 
 class CommentsConsumer(AsyncWebsocketConsumer):
+    """
+    This consumer has all comments logic
+
+    def connect - Just connect the user to the channel layer room, and save post_pk information.
+
+    def disconnect - This only discard the users from channel layer, in other words he is disconnected.
+
+    def receive - This method receive messages from web-socket and send to the room group, if user comment on post
+    or reply/delete a comment the receive update the database.
+    Also save the users comments or reply/delete and send back to the channel layer room group.
+
+    def chat_message - Send back all channel layer room group messages to the frontend with all nescessary
+    comment informations.
+    """
     async def connect(self):
         self.post_pk = self.scope['url_route']['kwargs']['post_pk']
         self.room_group_name = 'post_%s' % self.post_pk

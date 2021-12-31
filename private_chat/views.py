@@ -8,6 +8,9 @@ from django.db.models import Q
 
 
 class Solicita(View):
+    """
+    This classView create a solicitation contact to destinatary user
+    """
     def get(self, request, pk, *args, **kwargs):
         destinatario = Profile.objects.get(pk=pk)
         if not SolicitaModel.objects.filter(remetente=request.user, destinatario=destinatario.user).exists():
@@ -21,6 +24,9 @@ class Solicita(View):
 
 
 class ListThreads(LoginRequiredMixin, View):
+    """
+    List all contacts users
+    """
     def get(self, request, *args, **kwargs):
         threads = ThreadModel.objects.filter(Q(user=request.user) | Q(receiver=request.user))
         salas_user = ChatRoom.objects.filter(users=request.user)
@@ -36,6 +42,9 @@ class ListThreads(LoginRequiredMixin, View):
 
 
 class RemoveSolicita(View):
+    """
+    Decline solicitation contact
+    """
     def post(self, request, pk, *args, **kwargs):
         profile = Profile.objects.get(pk=pk)
         receiver = profile.user
@@ -47,6 +56,9 @@ class RemoveSolicita(View):
 
 
 class CreateThread(LoginRequiredMixin, View):
+    """
+    Create a new thread, a new user contact if you don't have contact before
+    """
     def post(self, request, pk, *args, **kwargs):
         profile = Profile.objects.get(pk=pk)
         receiver = profile.user
@@ -72,6 +84,9 @@ class CreateThread(LoginRequiredMixin, View):
 
 
 class ThreadView(LoginRequiredMixin, UserPassesTestMixin, View):
+    """
+    Get thread users information to list all mensages, users rooms and users last mensages from another chat
+    """
     def get(self, request, pk, *args, **kwargs):
         thread = ThreadModel.objects.get(pk=pk)
         messages = MessageModel.objects.filter(thread__pk__contains=pk)
@@ -89,6 +104,7 @@ class ThreadView(LoginRequiredMixin, UserPassesTestMixin, View):
         return render(request, 'private_chat/thread.html', context)
 
     def test_func(self):
+        # Test mixin to garant acess for only users in the private room
         pk = self.kwargs.get('pk')
         thread = ThreadModel.objects.get(pk=pk)
         if self.request.user == thread.user or self.request.user == thread.receiver:

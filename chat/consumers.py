@@ -5,6 +5,21 @@ from .models import ChatRoom, Chat, Profile
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
+    """
+    This consumer has all chat menssages logic
+
+    def connect - If user not in chat-room he is added to chat and the consumer update the chat-room users number,
+    the consumer also send a message that a new user has joined to the room.
+
+    def disconnect - This only discard the users from channel layer, in other words he is disconnected.
+
+    def receive - This method receive messages from web-socket and send to the room group, if user exit the chat-room
+    the receive remove this user and update the database after this send a message to the chat-room that the user exit.
+    Also save the users menssages and send back to the channel layer room group.
+
+    def chat_message - Send back all channel layer room group messages to the frontend, like messages and if a user
+    joined to the chat-room or exited from there.
+    """
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
@@ -19,12 +34,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             if self.scope['user'].id == user['id']:
                 ja_esta = True
 
-        if ja_esta:
-            pass
-        else:
-            await database_sync_to_async(room.users.add)(self.scope['user'])
-            await database_sync_to_async(room.save)()
-
         room = await database_sync_to_async(ChatRoom.objects.get)(name=self.room_name)
         num_users = await database_sync_to_async(room.users.all().values)()
         num_users = await database_sync_to_async(list)(num_users)
@@ -35,6 +44,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             perfil = await database_sync_to_async(Profile.objects.get)(user=user['id'])
             usuarios.append({'id': user['id'], 'username': user['username'], 'image': perfil.image.url})
         print(usuarios)
+
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -47,6 +57,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             print('user já esta')
             pass
         else:
+            await database_sync_to_async(room.users.add)(self.scope['user'])
+            await database_sync_to_async(room.save)()
             print('user adicionado')
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -60,8 +72,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
 
+    # Leave room group
     async def disconnect(self, close_code):
-        # Leave room group
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -150,6 +162,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
 class RoomConsumer(AsyncWebsocketConsumer):
+    """
+    This consumer update all chat rooms to show rooms users and new created rooms
+    """
     async def connect(self):
 
         salas = await database_sync_to_async(ChatRoom.objects.values)()

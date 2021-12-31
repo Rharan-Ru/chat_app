@@ -27,18 +27,6 @@ class Room(LoginRequiredMixin, View):
         else:
             room = ChatRoom(name=room_name)
             room.save()
-        ja_esta = False
-        for user in room.users.values('id'):
-            if self.request.user.pk == user['id']:
-                ja_esta = True
-
-        # if ja_esta:
-        #     print('ja esta - view ')
-        #     pass
-        # else:
-        #     print('nao estava - view')
-        #     room.users.add(request.user)
-        #     room.save()
 
         context = {
             'room_name': room_name,

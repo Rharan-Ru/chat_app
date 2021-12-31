@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-q29&i5xixnu7m$!kfmx2&d-3f!*r02*tfclg(2900_jxqjoczq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', 'https://monke-chatapp.herokuapp.com/', 'https://www.heroku.com/', '127.0.0.1']
 
 
 # Application definition
@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     # Django-all-auth package
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     'crispy_forms',
 
     # Channels package

@@ -50,11 +50,11 @@ python3 manage.py runserver
   Eu realizei o deploy desse projeto no Heroku, ele não foi muito intuitivo de fazer quanto fazer um deploy normal sem usar Django Channels, mas consegui fazendo algumas pesquisas rápidas no google, você pode conferir o live project neste link <bold><a href="https://monke-chatapp.herokuapp.com/" target="_blank">Chat App</a></bold>. Lista de usuários padrão:
 </p>
 
-- usuário:user01, senha: teste1010
-- usuário:user02, senha: teste1010
-- usuário:user03, senha: teste1010
-- usuário:user04, senha: teste1010
-- usuário:user05, senha: teste1010
+- usuário: user01, senha: teste1010
+- usuário: user02, senha: teste1010
+- usuário: user03, senha: teste1010
+- usuário: user04, senha: teste1010
+- usuário: user05, senha: teste1010
 
 <hr />
 

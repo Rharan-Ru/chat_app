@@ -36,7 +36,7 @@ python3 manage.py runserver
 - Salas de chat em tempo real, possibilitando a saida e mostrando uma mensagem de quando o usuário entra ou sai da sala.
 - Salas privadas, o usuário pode ter conversas privadas com outros usuários, assim como aceitar a solicitação de contato ou mesmo enviar uma solicitação.
 - Comentários em tempo real, podendo excluir o comentário feito e também responder outros comentários.
-- Sistema de likes em posts e contagem de visualização
+- Sistema de likes em posts e contagem de visualização.
 
 ### The Future
 
@@ -47,7 +47,7 @@ python3 manage.py runserver
 ### This project was deployed!
 
 <p>
-  Eu realizei o deploy desse projeto no Heroku, ele não foi muito intuitivo de fazer quanto fazer um deploy normal sem usar Django Channels, mas consegui fazendo algumas pesquisas rápidas no google, você pode conferir o live project neste link <bold><a href="https://monke-chatapp.herokuapp.com/" target="_blank">Chat App</a></bold>. E usar uma lista de usuários padrão:
+  Eu realizei o deploy desse projeto no Heroku, ele não foi muito intuitivo de fazer quanto fazer um deploy normal sem usar Django Channels, mas consegui fazendo algumas pesquisas rápidas no google, você pode conferir o live project neste link <bold><a href="https://monke-chatapp.herokuapp.com/" target="_blank">Chat App</a></bold>. Lista de usuários padrão:
 </p>
 
 - usuário:user01, senha: teste1010
@@ -58,7 +58,7 @@ python3 manage.py runserver
 
 <hr />
 
-#### Obrigado por estar aqui, eu nunca vou parar, vou ficar um pouco melhor a cada dia trazendo cada vez mais projeto interessantes
+#### Obrigado por estar aqui, eu nunca vou parar, vou ficar um pouco melhor a cada dia trazendo projetos cada vez mais interessantes.
 
 <p align="center">
   <img src="https://jonchaisson.files.wordpress.com/2021/10/anime-writing.gif" width=70% />
